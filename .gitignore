@@ -6,6 +6,14 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 *.egg-info/
+build/
+dist/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
 
 # Contracts (NEVER commit source contracts)
 contracts/
@@ -15,19 +23,36 @@ tests/fixtures/*.docx
 !tests/fixtures/sample.docx
 !tests/fixtures/scanned.pdf
 
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+
 # Env
 .env
 .env.local
+.envrc
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
 
 # OS
 .DS_Store
+Thumbs.db
 
 # Logs
 *.log
 
-# Local planning / tooling
+# Local planning / tooling (not part of the public repo)
 superpowers/
+openai_plan.md
+
+# Claude Code local settings (machine-specific permissions)
+.claude/

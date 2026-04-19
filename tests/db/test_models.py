@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from app.db.models import Base, Contract, Clause, MetadataConfidence
+from app.db.models import Base, Contract, Clause
 
 
 @pytest.fixture()
