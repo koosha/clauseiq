@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 .venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
 *.egg-info/
 
 # Contracts (NEVER commit source contracts)
@@ -25,3 +28,6 @@ tests/fixtures/*.docx
 
 # Logs
 *.log
+
+# Local planning / tooling
+superpowers/

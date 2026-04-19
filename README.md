@@ -2,8 +2,9 @@
 
 PrecedentIQ MVP — legal precedent retrieval for executed SaaS MSAs.
 
-See [PrecedentIQ_MVP_Plan_Consolidated.md](PrecedentIQ_MVP_Plan_Consolidated.md) for the full design.
-See [docs/superpowers/plans/](docs/superpowers/plans/) for the implementation plan.
+See [docs/architecture/PrecedentIQ_MVP_Plan_Consolidated.md](docs/architecture/PrecedentIQ_MVP_Plan_Consolidated.md) for the full design.
+See [docs/architecture/PrecedentIQ_MVP_Ingestion_Plan.md](docs/architecture/PrecedentIQ_MVP_Ingestion_Plan.md) for the current ingestion implementation plan.
+See [docs/README.md](docs/README.md) for the documentation layout.
 
 ## Quick Start
 
