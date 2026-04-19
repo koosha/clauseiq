@@ -24,4 +24,4 @@ def test_settings_rejects_missing_required(monkeypatch):
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     with pytest.raises(ValidationError):
-        Settings()
+        Settings(_env_file=None)
