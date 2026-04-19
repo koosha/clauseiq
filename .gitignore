@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Contracts (NEVER commit source contracts)
+contracts/
+tests/fixtures/*.pdf
+tests/fixtures/*.docx
+!tests/fixtures/sample.pdf
+!tests/fixtures/sample.docx
+!tests/fixtures/scanned.pdf
+
+# Env
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+*.log

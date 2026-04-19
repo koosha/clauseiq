@@ -1,0 +1,52 @@
+[project]
+name = "clauseiq"
+version = "0.1.0"
+description = "PrecedentIQ MVP — legal precedent retrieval for SaaS MSAs"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "psycopg[binary]>=3.2",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "opensearch-py>=2.6",
+    "pymupdf>=1.24",
+    "python-docx>=1.1",
+    "openai>=1.40",
+    "click>=8.1",
+    "structlog>=24.1",
+    "tenacity>=8.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "testcontainers[postgres,opensearch]>=4.8",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+clauseiq = "app.cli:cli"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
