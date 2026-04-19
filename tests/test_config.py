@@ -1,5 +1,5 @@
-import os
 import pytest
+from pydantic import ValidationError
 from app.config import Settings
 
 
@@ -23,5 +23,5 @@ def test_settings_loads_from_env(monkeypatch):
 def test_settings_rejects_missing_required(monkeypatch):
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         Settings()
