@@ -35,6 +35,9 @@ clauseiq = "app.cli:cli"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+markers = [
+    "integration: tests that need live Docker services (Postgres + OpenSearch)",
+]
 
 [tool.ruff]
 line-length = 100
