@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ClauseIQ — Hi-Fi Wireframes · Workbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f6f3;
+    --panel:#fff;
+    --panel-2:#faf9f6;
+    --ink:#161614;
+    --ink-2:#2a2927;
+    --ink-3:#6b6a64;
+    --ink-4:#a5a39c;
+    --line:#e2dfd8;
+    --line-2:#eceae3;
+    --accent:oklch(0.52 0.09 275);
+    --accent-2:oklch(0.93 0.03 275);
+    --accent-3:oklch(0.78 0.08 275);
+    --good:oklch(0.55 0.09 150);
+    --warn:oklch(0.62 0.12 55);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,sans-serif;
+    --display:'Fraunces',Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .canvas{max-width:1400px;margin:0 auto;padding:56px 40px 140px}
+  .doc-head{border-bottom:1px solid var(--line);padding-bottom:32px;margin-bottom:56px}
+  .doc-head .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+  .doc-head h1{font-family:var(--display);font-weight:500;font-size:52px;letter-spacing:-.02em;line-height:1;margin:0 0 14px}
+  .doc-head h1 em{font-style:italic;color:var(--ink-3);font-weight:500}
+  .doc-head .lede{font-size:16px;color:var(--ink-2);max-width:720px}
+  .scene-head{display:grid;grid-template-columns:60px 1fr;gap:20px;align-items:baseline;padding-bottom:14px;border-bottom:2px solid var(--ink);margin:72px 0 28px}
+  .scene-num{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink)}
+  .scene-title{font-family:var(--display);font-size:28px;font-weight:500;letter-spacing:-.01em;margin:0}
+  .scene-sub{grid-column:2;color:var(--ink-3);font-size:14px;margin-top:4px;max-width:800px}
+  .wf{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.02),0 12px 40px -12px rgba(0,0,0,.08);margin:12px 0 28px}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin:10px 2px 0}
+  /* =========== App shell =========== */
+  .app{font-size:13px;color:var(--ink);display:flex;flex-direction:column;min-height:820px}
+  .topbar{height:48px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);gap:12px;background:var(--panel);flex-shrink:0}
+  .brand{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em}
+  .brand .dot{color:var(--accent)}
+  .topbar .searchbar{flex:1;display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:7px 12px;font-family:var(--mono);font-size:12.5px;color:var(--ink-2);cursor:pointer;transition:.15s}
+  .topbar .searchbar:hover{border-color:var(--ink-3)}
+  .topbar .searchbar .chev{color:var(--accent);font-weight:600}
+  .topbar .searchbar .ph{color:var(--ink-4);flex:1}
+  .topbar .searchbar .kbd{margin-left:auto}
+  .kbd{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 5px;background:var(--bg);border:1px solid var(--line);border-radius:3px;color:var(--ink-2);letter-spacing:.04em;display:inline-block}
+  .bar-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line);background:var(--panel);border-radius:5px;font-size:12px;color:var(--ink-2);cursor:pointer;font-family:inherit;font-weight:500}
+  .bar-btn:hover{background:var(--bg);color:var(--ink)}
+  .bar-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .bar-btn.primary:hover{background:var(--ink-2)}
+  .pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border:1px solid var(--line);border-radius:3px;color:var(--ink-3);background:var(--panel);font-weight:500;white-space:nowrap;display:inline-block}
+  .pill.fam{color:var(--accent);border-color:var(--accent-2);background:var(--accent-2)}
+  .pill.good{color:var(--good);border-color:color-mix(in oklab,var(--good) 30%,white);background:color-mix(in oklab,var(--good) 10%,white)}
+  .pill.ink{color:#fff;border-color:var(--ink);background:var(--ink)}
+  .pill.warn{color:var(--warn);border-color:color-mix(in oklab,var(--warn) 30%,white);background:color-mix(in oklab,var(--warn) 10%,white)}
+  /* =========== Main grid =========== */
+  .main{display:grid;grid-template-columns:220px 1fr 1.15fr;flex:1;min-height:0}
+  /* filter rail */
+  .rail{border-right:1px solid var(--line);background:var(--panel-2);overflow-y:auto}
+  .rail .grp{padding:14px 16px;border-bottom:1px solid var(--line-2)}
+  .rail h4{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+  .rail h4 .clear{color:var(--accent);font-family:var(--mono);font-size:9px;cursor:pointer;text-transform:none;letter-spacing:.05em}
+  .opt{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12.5px;color:var(--ink-2);cursor:pointer;line-height:1.3}
+  .opt:hover{color:var(--ink)}
+  .opt .count{font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+  .opt.sel{color:var(--ink);font-weight:600}
+  .opt.sel::before{content:"■ ";color:var(--accent);margin-right:2px}
+  .opt .more{color:var(--ink-4);font-family:var(--mono);font-size:10.5px}
+  /* results list */
+  .results{border-right:1px solid var(--line);overflow-y:auto;background:var(--panel)}
+  .results-head{padding:10px 14px;border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--ink-3);position:sticky;top:0;background:var(--panel);z-index:1}
+  .results-head b{color:var(--ink)}
+  .row{display:grid;grid-template-columns:24px 1fr auto;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line-2);align-items:start;cursor:pointer;transition:background .1s}
+  .row:hover{background:var(--bg)}
+  .row.sel{background:color-mix(in oklab,var(--accent) 7%,white);box-shadow:inset 3px 0 0 var(--accent)}
+  .row .idx{font-family:var(--mono);font-size:11px;color:var(--ink-4);padding-top:2px}
+  .row .head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+  .row .title{font-weight:600;color:var(--ink);font-size:13px;letter-spacing:-.005em}
+  .row .ctx{font-size:11.5px;color:var(--ink-3);font-family:var(--mono);margin-bottom:4px}
+  .row .ctx b{color:var(--ink-2);font-weight:600}
+  .row .clause{color:var(--ink-2);line-height:1.5;font-size:12.5px}
+  .row .clause mark{background:color-mix(in oklab,var(--accent) 20%,white);color:var(--ink);padding:0 2px;border-radius:2px}
+  .row .meta{margin-top:6px;display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+  .row .meta b{color:var(--ink-2)}
+  .row .act{display:flex;gap:4px}
+  .row .act button{font-family:var(--mono);font-size:10.5px;padding:3px 6px;border:1px solid var(--line);background:var(--panel);border-radius:3px;color:var(--ink-2);cursor:pointer}
+  .row .act button.pinned{background:var(--accent-2);color:var(--accent);border-color:var(--accent)}
+  /* preview pane */
+  .preview{display:flex;flex-direction:column;background:var(--panel);overflow:hidden}
+  .preview-head{padding:10px 16px;border-bottom:1px solid var(--line-2);background:var(--panel-2);display:flex;gap:8px;align-items:center;flex-shrink:0}
+  .preview-head .trail{font-family:var(--mono);font-size:11px;color:var(--ink-3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .preview-head .trail b{color:var(--ink)}
+  .preview-body{padding:22px 28px;overflow-y:auto;flex:1}
+  .preview-body .doc-top{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-3);margin-bottom:4px;text-transform:uppercase}
+  .preview-body h2{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+  .preview-body .ctx-line{color:var(--ink-4);font-size:12.5px;line-height:1.75;margin-bottom:12px}
+  .preview-body .ctx-line b{color:var(--ink-3)}
+  .preview-body .focal{background:color-mix(in oklab,var(--accent) 10%,white);border-left:3px solid var(--accent);padding:16px 20px;margin:4px -20px;border-radius:0 4px 4px 0}
+  .preview-body .focal .tag{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:8px;text-transform:uppercase;font-weight:600}
+  .preview-body .focal .txt{color:var(--ink);font-size:13.5px;line-height:1.75}
+  .preview-body .focal .txt mark{background:color-mix(in oklab,var(--accent) 26%,white);padding:0 2px;border-radius:2px}
+  .preview-foot{padding:8px 16px;border-top:1px solid var(--line-2);font-family:var(--mono);font-size:10.5px;color:var(--ink-4);display:flex;gap:10px;align-items:center;flex-shrink:0;background:var(--panel-2)}
+  .preview-foot b{color:var(--ink-2)}
+  /* scratchpad dock */
+  .dock{border-top:1.5px solid var(--ink);background:var(--panel-2);flex-shrink:0}
+  .dock-head{padding:10px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line-2)}
+  .dock-head .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .dock-tiles{padding:12px 16px;display:flex;gap:10px;overflow-x:auto}
+  .tile{min-width:240px;max-width:240px;background:color-mix(in oklab,var(--accent) 5%,white);border:1px solid var(--accent-2);border-radius:4px;padding:9px 12px;font-size:12px;flex-shrink:0}
+  .tile .th{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  .tile .tt{font-weight:600;color:var(--ink);font-size:12px}
+  .tile .tm{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+  .tile .tx{font-size:11.5px;color:var(--ink-3);line-height:1.45;max-height:45px;overflow:hidden}
+  /* ===== Command palette overlay ===== */
+  .pal-scrim{position:absolute;inset:0;background:rgba(22,22,20,.45);display:flex;align-items:flex-start;justify-content:center;padding-top:100px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:5}
+  .pal{width:640px;max-width:90%;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 30px 60px -10px rgba(0,0,0,.35);overflow:hidden}
+  .pal-input{padding:14px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+  .pal-input .chev{color:var(--accent);font-family:var(--mono);font-weight:600;font-size:15px}
+  .pal-input .q{flex:1;font-family:var(--mono);font-size:14px;color:var(--ink)}
+  .pal-input .cur{display:inline-block;width:2px;height:16px;background:var(--accent);vertical-align:-3px;animation:blink 1.1s step-end infinite}
+  @keyframes blink{50%{opacity:0}}
+  .pal-grp{padding:4px 0}
+  .pal-grp h6{padding:10px 18px 4px;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin:0;font-weight:600}
+  .pal-item{padding:8px 18px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+  .pal-item.sel{background:color-mix(in oklab,var(--accent) 7%,white);color:var(--ink)}
+  .pal-item .ic{font-family:var(--mono);color:var(--ink-3);width:14px}
+  .pal-item.sel .ic{color:var(--accent)}
+  .pal-item .sp{flex:1}
+  .pal-foot{padding:8px 18px;border-top:1px solid var(--line-2);font-family:var(--mono);font-size:10.5px;color:var(--ink-3);background:var(--panel-2);display:flex;gap:14px;align-items:center}
+  /* ===== Placeholder util ===== */
+  .ph-line{height:8px;background:var(--line);border-radius:2px;margin:5px 0}
+  .ph-line.w90{width:90%}.ph-line.w80{width:80%}.ph-line.w70{width:70%}.ph-line.w60{width:60%}.ph-line.w50{width:50%}
+  /* Zero state */
+  .zero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;color:var(--ink-3);height:100%}
+  .zero .ic{width:48px;height:48px;border:1.5px dashed var(--ink-3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:22px;color:var(--ink-3);margin-bottom:16px}
+  .zero h3{font-family:var(--display);font-weight:500;font-size:19px;color:var(--ink);margin:0 0 6px;letter-spacing:-.01em}
+  .zero p{margin:0 0 14px;font-size:13px;max-width:300px;line-height:1.5}
+  /* Loading shimmer */
+  @keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}
+  .shim{background:linear-gradient(90deg,var(--line-2) 0%,var(--line) 50%,var(--line-2) 100%);background-size:400px 100%;animation:shimmer 1.4s infinite;border-radius:3px;height:10px}
+  /* Scene grid */
+  .scene-grid{display:grid;grid-template-columns:1fr;gap:8px}
+  /* component inventory */
+  .inv{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+  .inv .c{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px}
+  .inv h6{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;font-weight:600}
+  .inv .tok{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);line-height:1.8}
+  .sw{display:inline-block;width:13px;height:13px;border:1px solid var(--ink);border-radius:2px;vertical-align:-2px;margin-right:5px}
+  /* prose */
+  .prose p{margin:0 0 12px;max-width:720px;line-height:1.65;color:var(--ink-2)}
+  .prose p strong{color:var(--ink);font-weight:600}
+  .prose ul{padding-left:18px;max-width:720px}
+  .prose li{margin-bottom:5px;color:var(--ink-2);line-height:1.55}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1120px}
+  @media (max-width:1200px){.main{grid-template-columns:180px 1fr 1fr}}
+  @media (max-width:900px){.canvas{padding:24px 16px 80px}.main{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<header class="doc-head">
+  <div class="eyebrow">Hi-Fi Wireframes · Direction C · v 0.1</div>
+  <h1>ClauseIQ &nbsp;<em>— Workbench.</em></h1>
+  <p class="lede">Tightened mockups of the adopted direction: three-column workbench with a bottom scratchpad dock and a universal command palette. All states shown in context, at working type size and density.</p>
+</header>
+
+<!-- ========== 01 DEFAULT ========== -->
+<div class="scene-head">
+  <div class="scene-num">01</div>
+  <h2 class="scene-title">Default — results with live preview</h2>
+</div>
+<p class="scene-sub">The resting state of the app after a query. Selected result mirrored into the preview. Scratchpad dock visible with the session's progress. Arrow keys move selection; preview updates instantly.</p>
+
+<div class="wf">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div class="searchbar">
+        <span class="chev">&gt;</span>
+        <span style="color:var(--ink)">limitation of liability cap · 12 months of fees · IP carve-out</span>
+        <span class="ph"></span>
+        <span class="kbd">⌘K</span>
+      </div>
+      <span class="pill">1,284 clauses · 47 contracts</span>
+      <button class="bar-btn">4 pinned</button>
+    </div>
+    <div class="main">
+      <aside class="rail">
+        <div class="grp">
+          <h4>Clause family <span class="clear">clear</span></h4>
+          <div class="opt sel"><span>Limitation of liability</span><span class="count">87</span></div>
+          <div class="opt"><span>Indemnification</span><span class="count">64</span></div>
+          <div class="opt"><span>Warranties &amp; disclaimers</span><span class="count">51</span></div>
+          <div class="opt"><span>Termination</span><span class="count">89</span></div>
+          <div class="opt"><span>Payment terms</span><span class="count">112</span></div>
+          <div class="opt"><span class="more">Show all 20 →</span></div>
+        </div>
+        <div class="grp">
+          <h4>Governing law</h4>
+          <div class="opt sel"><span>New York</span><span class="count">22</span></div>
+          <div class="opt"><span>Delaware</span><span class="count">14</span></div>
+          <div class="opt"><span>California</span><span class="count">8</span></div>
+          <div class="opt"><span>Any</span><span class="count">47</span></div>
+        </div>
+        <div class="grp">
+          <h4>Counterparty</h4>
+          <div class="opt"><span>Acme Corp</span><span class="count">3</span></div>
+          <div class="opt"><span>Globex Inc.</span><span class="count">2</span></div>
+          <div class="opt"><span>Initech</span><span class="count">2</span></div>
+          <div class="opt"><span>Hooli</span><span class="count">2</span></div>
+          <div class="opt"><span class="more">+ 31 more</span></div>
+        </div>
+        <div class="grp">
+          <h4>Confidence</h4>
+          <div class="opt"><span>High</span><span class="count">62</span></div>
+          <div class="opt"><span>Medium</span><span class="count">18</span></div>
+          <div class="opt"><span>Low</span><span class="count">7</span></div>
+        </div>
+        <div class="grp">
+          <h4>Signed date</h4>
+          <div class="opt"><span>Last 12 months</span><span class="count">18</span></div>
+          <div class="opt"><span>Last 3 years</span><span class="count">41</span></div>
+          <div class="opt"><span>Any</span><span class="count">47</span></div>
+        </div>
+      </aside>
+
+      <section class="results">
+        <div class="results-head">
+          <b>14</b> <span>results</span><span>·</span><span>BM25 + kNN → RRF → rerank</span><span>·</span><span>186 ms</span>
+          <div style="flex:1"></div>
+          <span class="pill">Relevance ↓</span>
+        </div>
+
+        <div class="row sel">
+          <div class="idx">01</div>
+          <div>
+            <div class="head"><span class="title">Cap at 12 months of fees</span><span class="pill fam">limitation_of_liability</span><span class="pill good">executed</span></div>
+            <div class="ctx">Initech MSA · <b>Initech LLC</b> · §8.2 · signed 2022-11-03 · N.Y. law</div>
+            <div class="clause">Except for breaches of confidentiality or indemnification obligations, each party's <mark>total aggregate liability</mark> arising out of or relating to this Agreement shall not exceed the <mark>fees paid by Customer in the twelve (12) months</mark> preceding the event giving rise to the claim.</div>
+            <div class="meta"><span>score <b>0.96</b></span><span>·</span><span>matched: aggregate liability · 12 months · fees paid</span></div>
+          </div>
+          <div class="act"><button class="pinned">📌</button></div>
+        </div>
+
+        <div class="row">
+          <div class="idx">02</div>
+          <div>
+            <div class="head"><span class="title">Liability cap with IP indemnity carve-out</span><span class="pill fam">limitation_of_liability</span></div>
+            <div class="ctx">Acme MSA · <b>Acme Corp</b> · §8.3 · signed 2023-06-14 · N.Y. law</div>
+            <div class="clause">Notwithstanding the foregoing, the liability cap in Section 8.2 shall <mark>not apply</mark> to (i) a party's <mark>indemnification obligations for third-party intellectual property claims</mark>, (ii) breaches of confidentiality, or (iii) a party's gross negligence or willful misconduct.</div>
+            <div class="meta"><span>score <b>0.93</b></span><span>·</span><span>matched: carve-out · IP · indemnification</span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+
+        <div class="row">
+          <div class="idx">03</div>
+          <div>
+            <div class="head"><span class="title">Mutual liability cap · greater-of formula</span><span class="pill fam">limitation_of_liability</span></div>
+            <div class="ctx">Globex MSA · <b>Globex Inc.</b> · §9.1 · signed 2024-02-20 · N.Y. law</div>
+            <div class="clause">Each party's aggregate liability under this Agreement shall not exceed the <mark>greater of (a) twelve (12) months of fees</mark> paid by Customer in the twelve months preceding the claim or <mark>(b) $500,000</mark>.</div>
+            <div class="meta"><span>score <b>0.89</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+
+        <div class="row">
+          <div class="idx">04</div>
+          <div>
+            <div class="head"><span class="title">Exclusion of indirect damages</span><span class="pill fam">limitation_of_liability</span></div>
+            <div class="ctx">Pied Piper MSA · <b>Pied Piper</b> · §7.4 · N.Y. law</div>
+            <div class="clause">In no event shall either party be liable for any <mark>indirect, incidental, special, consequential, or punitive damages</mark>, including loss of profits, data, or goodwill, even if advised of the possibility.</div>
+            <div class="meta"><span>score <b>0.84</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+
+        <div class="row">
+          <div class="idx">05</div>
+          <div>
+            <div class="head"><span class="title">Super-cap for gross negligence</span><span class="pill fam">limitation_of_liability</span></div>
+            <div class="ctx">Sterling Cooper MSA · <b>Sterling Cooper</b> · §8.4 · Del. law</div>
+            <div class="clause">The liability cap set forth in Section 8.2 shall be <mark>increased to three (3) times the fees paid</mark> in the prior twelve months for claims arising out of a party's gross negligence or willful misconduct.</div>
+            <div class="meta"><span>score <b>0.79</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+
+        <div class="row">
+          <div class="idx">06</div>
+          <div>
+            <div class="head"><span class="title">Uncapped obligations</span><span class="pill fam">limitation_of_liability</span></div>
+            <div class="ctx">Hooli MSA · <b>Hooli</b> · §8.5 · Cal. law</div>
+            <div class="clause">Nothing in this Agreement shall limit a party's liability for (a) fraud or fraudulent misrepresentation; (b) death or personal injury caused by negligence; (c) breaches of Section 11 (Confidentiality); or (d) payment of undisputed fees.</div>
+            <div class="meta"><span>score <b>0.72</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+
+        <div class="row">
+          <div class="idx">07</div>
+          <div>
+            <div class="head"><span class="title">Single-party cap (vendor only)</span><span class="pill fam">limitation_of_liability</span></div>
+            <div class="ctx">Vandelay MSA · <b>Vandelay Ind.</b> · §8.1 · N.Y. law</div>
+            <div class="clause">Vendor's total aggregate liability shall not exceed the fees paid by Customer in the twelve (12) months preceding the claim. Customer's liability shall be uncapped for amounts owed for services rendered.</div>
+            <div class="meta"><span>score <b>0.68</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+      </section>
+
+      <section class="preview">
+        <div class="preview-head">
+          <span class="trail">Initech MSA › Article 8 › <b>§8.2 Limitation of Liability</b></span>
+          <button class="bar-btn">📌 Pinned</button>
+          <button class="bar-btn">Copy</button>
+          <button class="bar-btn">Open ↗</button>
+        </div>
+        <div class="preview-body">
+          <div class="doc-top">Master Services Agreement · Vendor Co. ↔ Initech LLC</div>
+          <h2>Article 8 · Warranties &amp; Liability</h2>
+          <div class="ctx-line"><b>8.1 Disclaimer.</b> Except as expressly set forth herein, the Service is provided "as is" and Vendor disclaims all other warranties, express or implied, including any warranty of merchantability or fitness for a particular purpose.</div>
+          <div class="focal">
+            <div class="tag">§ 8.2 · Limitation of Liability — matched</div>
+            <div class="txt">Except for breaches of confidentiality or indemnification obligations, each party's <mark>total aggregate liability</mark> arising out of or relating to this Agreement shall not exceed the <mark>fees paid by Customer in the twelve (12) months</mark> preceding the event giving rise to the claim. In no event shall either party be liable for indirect, consequential, or punitive damages, even if advised of the possibility of such damages.</div>
+          </div>
+          <div class="ctx-line" style="margin-top:18px"><b>8.3 IP Carve-out.</b> Notwithstanding the foregoing, the liability cap in Section 8.2 shall not apply to a party's indemnification obligations for third-party intellectual property claims under Section 10.</div>
+          <div class="ctx-line"><b>8.4 Survival.</b> The limitations in this Article 8 shall survive any termination of this Agreement.</div>
+        </div>
+        <div class="preview-foot">
+          <span>clause_id · <b>cl_203_§8.2</b></span>
+          <span>·</span><span>confidence <b>high</b></span>
+          <span>·</span><span>pages <b>14–15</b></span>
+          <div style="flex:1"></div>
+          <span>⇄ use <span class="kbd">j</span>/<span class="kbd">k</span> to step</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- dock -->
+    <div class="dock">
+      <div class="dock-head">
+        <span class="lbl">Scratchpad</span>
+        <span class="pill">4 clauses · 3 contracts</span>
+        <div style="flex:1"></div>
+        <button class="bar-btn">Group by family</button>
+        <button class="bar-btn">Copy all</button>
+        <button class="bar-btn primary">Export draft ↓</button>
+        <button class="bar-btn">Collapse</button>
+      </div>
+      <div class="dock-tiles">
+        <div class="tile"><div class="th"><span class="tt">1 · Term for breach</span><span class="tm">Acme §9.2</span></div><div class="tx">Either party may terminate this Agreement for material breach upon thirty (30) days' written notice…</div></div>
+        <div class="tile"><div class="th"><span class="tt">2 · Term for convenience</span><span class="tm">Globex §11.3</span></div><div class="tx">Customer may terminate this Agreement for convenience upon sixty (60) days' prior written notice…</div></div>
+        <div class="tile"><div class="th"><span class="tt">3 · 12-mo fees cap</span><span class="tm">Initech §8.2</span></div><div class="tx">Aggregate liability not to exceed the fees paid in the 12 months preceding the claim…</div></div>
+        <div class="tile"><div class="th"><span class="tt">4 · IP carve-out</span><span class="tm">Acme §8.3</span></div><div class="tx">Cap shall not apply to indemnification obligations for third-party IP claims…</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cap">01 · Default state. 14 results, selection synced to preview, scratchpad dock anchored.</div>
+
+<!-- ========== 02 PALETTE ========== -->
+<div class="scene-head">
+  <div class="scene-num">02</div>
+  <h2 class="scene-title">Command palette open</h2>
+</div>
+<p class="scene-sub">Universal entry surface. Opens on ⌘K, / or Ctrl+K. Accepts natural-language queries, pasted draft clauses, and jump commands (family:, law:, recent:). Typing filters actions in real time.</p>
+
+<div class="wf">
+  <div class="app" style="position:relative">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div class="searchbar"><span class="chev">&gt;</span><span class="ph">Describe the clause you want, or paste draft language…</span><span class="kbd">⌘K</span></div>
+      <span class="pill">1,284 clauses</span>
+      <button class="bar-btn">0 pinned</button>
+    </div>
+    <div class="main" style="opacity:.5;pointer-events:none">
+      <aside class="rail">
+        <div class="grp"><h4>Clause family</h4><div class="opt">Limitation of liability</div><div class="opt">Indemnification</div><div class="opt">Warranties</div></div>
+        <div class="grp"><h4>Governing law</h4><div class="opt">New York</div><div class="opt">Delaware</div></div>
+      </aside>
+      <section class="results"><div class="results-head"><b>—</b> <span>no query yet</span></div></section>
+      <section class="preview"><div class="preview-head"><span class="trail">—</span></div></section>
+    </div>
+    <div class="dock" style="opacity:.5">
+      <div class="dock-head"><span class="lbl">Scratchpad</span><span class="pill">empty</span></div>
+    </div>
+
+    <!-- palette -->
+    <div class="pal-scrim">
+      <div class="pal">
+        <div class="pal-input">
+          <span class="chev">&gt;</span>
+          <span class="q">cap on liability<span class="cur"></span></span>
+          <span class="kbd">esc</span>
+        </div>
+        <div class="pal-grp">
+          <h6>Run query</h6>
+          <div class="pal-item sel">
+            <span class="ic">⌕</span>
+            <span>Search clauses for "<b style="color:var(--ink);font-weight:600">cap on liability</b>"</span>
+            <span class="sp"></span>
+            <span class="kbd">↵</span>
+          </div>
+          <div class="pal-item">
+            <span class="ic">¶</span>
+            <span>Paste as draft clause → find similar</span>
+            <span class="sp"></span>
+            <span class="kbd">⇧ ↵</span>
+          </div>
+        </div>
+        <div class="pal-grp">
+          <h6>Scoped</h6>
+          <div class="pal-item">
+            <span class="ic">#</span>
+            <span>Search only <b style="color:var(--accent)">family:limitation_of_liability</b> for "cap on liability"</span>
+          </div>
+          <div class="pal-item">
+            <span class="ic">§</span>
+            <span>Search only <b style="color:var(--accent)">law:NY</b> for "cap on liability"</span>
+          </div>
+        </div>
+        <div class="pal-grp">
+          <h6>Recent</h6>
+          <div class="pal-item"><span class="ic">↻</span><span>30-day cure period for material breach</span><span class="sp"></span><span class="tm" style="font-family:var(--mono);font-size:10.5px;color:var(--ink-4)">4m ago</span></div>
+          <div class="pal-item"><span class="ic">↻</span><span>auto-renewal with opt-out</span><span class="sp"></span><span class="tm" style="font-family:var(--mono);font-size:10.5px;color:var(--ink-4)">1h ago</span></div>
+        </div>
+        <div class="pal-foot">
+          <span><span class="kbd">↑</span> <span class="kbd">↓</span> navigate</span>
+          <span><span class="kbd">↵</span> select</span>
+          <span><span class="kbd">⇥</span> add scope</span>
+          <div style="flex:1"></div>
+          <span>ClauseIQ · palette</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cap">02 · Palette opens from any state. Selection highlighted; query parsed into scoped suggestions.</div>
+
+<!-- ========== 03 LOADING ========== -->
+<div class="scene-head">
+  <div class="scene-num">03</div>
+  <h2 class="scene-title">Loading — after pressing Enter</h2>
+</div>
+<p class="scene-sub">Search returns in ~180 ms but we show a real loading state for any query over 300 ms. Results stream in top-down. Preview pane stays blank until first result lands, then auto-selects row 01.</p>
+
+<div class="wf">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div class="searchbar"><span class="chev">&gt;</span><span style="color:var(--ink)">cap on liability tied to fees paid in 12 months</span><span class="ph"></span><span class="pill warn" style="font-size:9px">searching…</span></div>
+      <span class="pill">1,284 clauses</span>
+      <button class="bar-btn">0 pinned</button>
+    </div>
+    <div class="main">
+      <aside class="rail">
+        <div class="grp"><h4>Clause family</h4><div class="opt">Limitation of liability</div><div class="opt">Indemnification</div></div>
+        <div class="grp"><h4>Governing law</h4><div class="opt">New York</div><div class="opt">Delaware</div></div>
+      </aside>
+      <section class="results">
+        <div class="results-head"><span>Searching…</span><span>·</span><span>BM25 + kNN running</span><div style="flex:1"></div><span class="shim" style="width:80px;height:10px"></span></div>
+        <div class="row"><div class="idx">—</div><div><div class="shim" style="width:60%;margin-bottom:8px"></div><div class="shim" style="width:40%;margin-bottom:10px"></div><div class="shim" style="width:95%;margin-bottom:4px"></div><div class="shim" style="width:90%;margin-bottom:4px"></div><div class="shim" style="width:70%"></div></div><div></div></div>
+        <div class="row"><div class="idx">—</div><div><div class="shim" style="width:55%;margin-bottom:8px"></div><div class="shim" style="width:35%;margin-bottom:10px"></div><div class="shim" style="width:92%;margin-bottom:4px"></div><div class="shim" style="width:85%"></div></div><div></div></div>
+        <div class="row"><div class="idx">—</div><div><div class="shim" style="width:50%;margin-bottom:8px"></div><div class="shim" style="width:30%;margin-bottom:10px"></div><div class="shim" style="width:88%;margin-bottom:4px"></div><div class="shim" style="width:75%"></div></div><div></div></div>
+        <div class="row"><div class="idx">—</div><div><div class="shim" style="width:45%;margin-bottom:8px"></div><div class="shim" style="width:25%;margin-bottom:10px"></div><div class="shim" style="width:80%"></div></div><div></div></div>
+      </section>
+      <section class="preview">
+        <div class="preview-head"><span class="trail">—</span></div>
+        <div class="zero"><div class="ic">⌕</div><h3>Waiting for first result</h3><p>Preview will auto-focus on the top match.</p></div>
+      </section>
+    </div>
+    <div class="dock"><div class="dock-head"><span class="lbl">Scratchpad</span><span class="pill">empty</span></div></div>
+  </div>
+</div>
+<div class="cap">03 · Loading. Skeleton rows, no layout shift. Streaming fills from top.</div>
+
+<!-- ========== 04 ZERO RESULTS ========== -->
+<div class="scene-head">
+  <div class="scene-num">04</div>
+  <h2 class="scene-title">Zero results</h2>
+</div>
+<p class="scene-sub">Rare but inevitable. We tell the user what filters narrowed the set and offer one-click ways to broaden. No dead-end.</p>
+
+<div class="wf">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div class="searchbar"><span class="chev">&gt;</span><span style="color:var(--ink)">termination for convenience · vendor-only · 180 days</span><span class="ph"></span><span class="kbd">⌘K</span></div>
+      <span class="pill">1,284 clauses</span>
+      <button class="bar-btn">0 pinned</button>
+    </div>
+    <div class="main">
+      <aside class="rail">
+        <div class="grp"><h4>Clause family <span class="clear">clear</span></h4><div class="opt sel">Termination <span class="count">89</span></div></div>
+        <div class="grp"><h4>Governing law</h4><div class="opt sel">Delaware <span class="count">14</span></div></div>
+      </aside>
+      <section class="results">
+        <div class="results-head"><b>0</b> <span>results</span><span>·</span><span>186 ms</span></div>
+        <div style="padding:28px 18px">
+          <h3 style="font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 8px;letter-spacing:-.01em">No matching clauses.</h3>
+          <p style="color:var(--ink-3);font-size:13px;line-height:1.55;margin:0 0 16px;max-width:320px">Two active filters are narrowing this search heavily. Try broadening:</p>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="bar-btn" style="justify-content:flex-start;width:100%"><span style="color:var(--accent);font-family:var(--mono)">×</span> Remove filter: <b style="color:var(--ink);margin-left:6px">law = Delaware</b> <span style="color:var(--ink-3);margin-left:auto">+14 likely</span></button>
+            <button class="bar-btn" style="justify-content:flex-start;width:100%"><span style="color:var(--accent);font-family:var(--mono)">×</span> Remove filter: <b style="color:var(--ink);margin-left:6px">family = Termination</b> <span style="color:var(--ink-3);margin-left:auto">+210 likely</span></button>
+            <button class="bar-btn" style="justify-content:flex-start;width:100%"><span style="color:var(--accent);font-family:var(--mono)">↻</span> Run the same query <b style="color:var(--ink);margin-left:6px">without any filters</b></button>
+            <button class="bar-btn" style="justify-content:flex-start;width:100%"><span style="color:var(--accent);font-family:var(--mono)">¶</span> Try paste-and-match mode</button>
+          </div>
+          <p style="color:var(--ink-4);font-size:11.5px;font-family:var(--mono);margin:18px 0 0;line-height:1.5">Tip: queries like "180 days" are very specific. Try "long notice period" or "extended termination notice".</p>
+        </div>
+      </section>
+      <section class="preview">
+        <div class="preview-head"><span class="trail">—</span></div>
+        <div class="zero"><div class="ic">—</div><h3>Nothing to preview</h3><p>Adjust filters or query to see matching clauses.</p></div>
+      </section>
+    </div>
+    <div class="dock"><div class="dock-head"><span class="lbl">Scratchpad</span><span class="pill">empty</span></div></div>
+  </div>
+</div>
+<div class="cap">04 · Zero results. Named-filter buttons show expected counts. "Tip" teaches query shape.</div>
+
+<!-- ========== 05 EMPTY HOME ========== -->
+<div class="scene-head">
+  <div class="scene-num">05</div>
+  <h2 class="scene-title">Empty home — first launch</h2>
+</div>
+<p class="scene-sub">No query yet. Shell is loaded, filters visible for browsing, preview pane hosts a first-run primer. Clicking a family filter runs a browse-mode query (no text).</p>
+
+<div class="wf">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div class="searchbar"><span class="chev">&gt;</span><span class="ph">What clause are you looking for? — press / or ⌘K to start</span><span class="kbd">⌘K</span></div>
+      <span class="pill">1,284 clauses · 47 contracts</span>
+      <button class="bar-btn">0 pinned</button>
+    </div>
+    <div class="main">
+      <aside class="rail">
+        <div class="grp">
+          <h4>Clause family</h4>
+          <div class="opt"><span>Limitation of liability</span><span class="count">87</span></div>
+          <div class="opt"><span>Indemnification</span><span class="count">64</span></div>
+          <div class="opt"><span>Termination</span><span class="count">89</span></div>
+          <div class="opt"><span>Payment terms</span><span class="count">112</span></div>
+          <div class="opt"><span>Fees &amp; pricing</span><span class="count">128</span></div>
+          <div class="opt"><span>Term &amp; renewal</span><span class="count">94</span></div>
+          <div class="opt"><span class="more">Show all 20 →</span></div>
+        </div>
+        <div class="grp"><h4>Governing law</h4><div class="opt">Any</div></div>
+      </aside>
+      <section class="results">
+        <div class="results-head"><span>Start typing, or browse a family →</span></div>
+        <div style="padding:40px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px">
+          <div style="font-family:var(--display);font-size:26px;font-weight:500;letter-spacing:-.01em;color:var(--ink);line-height:1.15;max-width:340px">Find a clause from your precedents.</div>
+          <div style="color:var(--ink-3);font-size:13px;max-width:360px;line-height:1.55">Describe a clause in plain English, paste draft language, or pick a family to browse.</div>
+          <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;justify-content:center">
+            <span class="pill">Try: cap on liability tied to 12 months of fees</span>
+            <span class="pill">Try: 30-day cure period for breach</span>
+            <span class="pill">Try: auto-renewal with opt-out notice</span>
+          </div>
+          <div style="margin-top:24px;padding:14px 18px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:6px;max-width:420px;text-align:left">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Keyboard · always on</div>
+            <div style="font-size:12.5px;line-height:1.7;color:var(--ink-2);font-family:var(--mono)">
+              <div><span class="kbd">/</span> focus palette</div>
+              <div><span class="kbd">j</span> <span class="kbd">k</span> next / prev result</div>
+              <div><span class="kbd">p</span> pin · <span class="kbd">c</span> copy · <span class="kbd">o</span> open</div>
+              <div><span class="kbd">⌘ ↵</span> export draft</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="preview">
+        <div class="preview-head"><span class="trail">— select a result —</span></div>
+        <div class="zero"><div class="ic">¶</div><h3>Preview appears here</h3><p>Selected clause will show in its contract context, with surrounding sections faded for focus.</p></div>
+      </section>
+    </div>
+    <div class="dock"><div class="dock-head"><span class="lbl">Scratchpad</span><span class="pill">0 clauses · start pinning to build a draft</span><div style="flex:1"></div><button class="bar-btn" disabled style="opacity:.5">Export draft ↓</button></div></div>
+  </div>
+</div>
+<div class="cap">05 · Empty home. Query primers + keyboard cheatsheet. Export disabled until scratchpad has content.</div>
+
+<!-- ========== 06 PASTE-AND-MATCH ========== -->
+<div class="scene-head">
+  <div class="scene-num">06</div>
+  <h2 class="scene-title">Paste-and-match mode</h2>
+</div>
+<p class="scene-sub">Lawyer pastes draft language; we route it to /search/by-text and show similar clauses from the library. The pasted text sits pinned at the top for context.</p>
+
+<div class="wf">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div class="searchbar"><span class="chev">¶</span><span style="color:var(--ink)">Paste-and-match · 142 chars</span><span class="ph"></span><button class="bar-btn">Edit pasted text</button></div>
+      <span class="pill ink">mode: text-similarity</span>
+    </div>
+    <div class="main">
+      <aside class="rail">
+        <div class="grp">
+          <h4>Auto-inferred</h4>
+          <div class="opt sel"><span>Confidentiality</span><span class="count">71</span></div>
+          <div class="opt"><span class="more">Override →</span></div>
+        </div>
+        <div class="grp"><h4>Governing law</h4><div class="opt">Any</div></div>
+      </aside>
+      <section class="results">
+        <div style="padding:14px 16px;background:color-mix(in oklab,var(--accent) 6%,white);border-bottom:1px solid var(--accent-2)">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px;text-transform:uppercase;font-weight:600">Your pasted draft</div>
+          <div style="font-size:12.5px;line-height:1.6;color:var(--ink);font-family:var(--display)">"Each party agrees to hold in strict confidence all non-public information disclosed by the other party, and to use such information solely for purposes of this Agreement. This obligation shall survive termination for five (5) years."</div>
+        </div>
+        <div class="results-head"><b>12</b> <span>similar clauses</span><span>·</span><span>kNN-dominant ranking</span><div style="flex:1"></div><span class="pill">Similarity ↓</span></div>
+        <div class="row sel">
+          <div class="idx">01</div>
+          <div>
+            <div class="head"><span class="title">Confidentiality · 5-year survival</span><span class="pill fam">confidentiality</span></div>
+            <div class="ctx">Acme MSA · §11.1 · N.Y. law</div>
+            <div class="clause">Each party shall <mark>hold in confidence</mark> all Confidential Information disclosed by the other party and shall not use such information except as required to perform this Agreement. The obligations under this Section shall <mark>survive for five (5) years</mark> following termination.</div>
+            <div class="meta"><span>similarity <b>0.94</b></span><span>·</span><span>same structure · longer survival cushion</span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+        <div class="row">
+          <div class="idx">02</div>
+          <div>
+            <div class="head"><span class="title">Mutual NDA-style confidentiality</span><span class="pill fam">confidentiality</span></div>
+            <div class="ctx">Globex MSA · §11.2 · Del. law</div>
+            <div class="clause">Each Party shall use the same degree of care to protect the other Party's Confidential Information as it uses to protect its own, but in no event less than reasonable care. This obligation shall survive for a period of three (3) years.</div>
+            <div class="meta"><span>similarity <b>0.87</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+        <div class="row">
+          <div class="idx">03</div>
+          <div>
+            <div class="head"><span class="title">Confidentiality with perpetual obligation for trade secrets</span><span class="pill fam">confidentiality</span></div>
+            <div class="ctx">Initech MSA · §10.1 · N.Y. law</div>
+            <div class="clause">…survive for five (5) years, provided that with respect to trade secrets, such obligation shall continue for as long as the information qualifies as a trade secret under applicable law.</div>
+            <div class="meta"><span>similarity <b>0.81</b></span></div>
+          </div>
+          <div class="act"><button>📌</button></div>
+        </div>
+      </section>
+      <section class="preview">
+        <div class="preview-head"><span class="trail">Acme MSA › Article 11 › <b>§11.1 Confidentiality</b></span><button class="bar-btn">📌 Pin</button><button class="bar-btn">Copy</button></div>
+        <div class="preview-body">
+          <div class="doc-top">Master Services Agreement · Acme Corp</div>
+          <h2>Article 11 · Confidentiality</h2>
+          <div class="focal">
+            <div class="tag">§ 11.1 · Confidentiality Obligation</div>
+            <div class="txt">Each party shall <mark>hold in confidence</mark> all Confidential Information disclosed by the other party and shall not use such information except as required to perform this Agreement. The obligations under this Section shall <mark>survive for five (5) years</mark> following termination of this Agreement.</div>
+          </div>
+          <div class="ctx-line" style="margin-top:16px"><b>11.2 Exclusions.</b> Confidential Information does not include information that is or becomes publicly available…</div>
+        </div>
+        <div class="preview-foot"><span>clause_id · <b>cl_071_§11.1</b></span><span>·</span><span>kNN distance <b>0.062</b></span></div>
+      </section>
+    </div>
+    <div class="dock"><div class="dock-head"><span class="lbl">Scratchpad</span><span class="pill">4 clauses · 3 contracts</span></div></div>
+  </div>
+</div>
+<div class="cap">06 · Paste-and-match. Pasted text pinned above results; family auto-inferred but overridable.</div>
+
+<!-- ========== 07 EXPORT ========== -->
+<div class="scene-head">
+  <div class="scene-num">07</div>
+  <h2 class="scene-title">Export modal — scratchpad to DOCX</h2>
+</div>
+<p class="scene-sub">The finish line. Lawyer reorders, names sections, picks a template, downloads a draft with citations as Word comments.</p>
+
+<div class="wf">
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">Clause<span class="dot">IQ</span></div>
+      <div style="flex:1;font-family:var(--mono);font-size:12px;color:var(--ink-3)">Export draft · <b style="color:var(--ink)">8 clauses from 6 contracts</b></div>
+      <button class="bar-btn">Cancel</button>
+      <button class="bar-btn primary">Download .docx ↓</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1.1fr 1fr;flex:1;min-height:540px">
+      <div style="border-right:1px solid var(--line);padding:18px 22px;overflow-y:auto">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;font-weight:600">Section order · drag to reorder, click to rename</div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§1 · Definitions</span><span class="tm">⋮⋮ placeholder</span></div><div class="tx">[To be filled after review]</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§2 · Services</span><span class="tm">⋮⋮ placeholder</span></div><div class="tx">[To be filled after review]</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§3 · Fees — Subscription</span><span class="tm">⋮⋮ Globex §3.1</span></div><div class="tx">Customer shall pay Vendor subscription fees as set forth in the applicable Order Form…</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§4 · Payment — Net 30</span><span class="tm">⋮⋮ Acme §4.1</span></div><div class="tx">Customer shall pay all undisputed invoices within thirty (30) days of receipt…</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§5 · Term &amp; Renewal</span><span class="tm">⋮⋮ Hooli §5.1</span></div><div class="tx">The initial term shall be thirty-six (36) months; thereafter auto-renewing for successive 12-month terms…</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§6 · Termination for Breach</span><span class="tm">⋮⋮ Acme §9.2</span></div><div class="tx">Either party may terminate for material breach upon thirty (30) days' written notice…</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§7 · Termination for Convenience</span><span class="tm">⋮⋮ Globex §11.3</span></div><div class="tx">Customer may terminate for convenience upon sixty (60) days' prior written notice…</div></div>
+        <div class="tile" style="min-width:0;max-width:none;margin-bottom:8px"><div class="th"><span class="tt">§8 · Limitation of Liability</span><span class="tm">⋮⋮ Initech §8.2 + Acme §8.3</span></div><div class="tx">Aggregate liability capped at 12 months of fees; IP indemnification carved out…</div></div>
+      </div>
+      <div style="background:var(--panel-2);padding:22px;overflow:hidden">
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <span class="pill ink">Template · Blank MSA</span>
+          <span class="pill">Citations · Word comments</span>
+          <span class="pill">Numbering · auto</span>
+          <span class="pill">Header · firm logo</span>
+        </div>
+        <div style="background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:28px 36px;font-family:var(--display);font-size:12.5px;line-height:1.7;color:var(--ink-2);max-height:480px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(0,0,0,.15)">
+          <div style="font-weight:600;font-size:15px;color:var(--ink);text-align:center;margin-bottom:18px;letter-spacing:.02em">MASTER SERVICES AGREEMENT</div>
+          <div style="color:var(--ink-3);font-size:10.5px;text-align:center;margin-bottom:22px;font-family:var(--mono);letter-spacing:.06em">DRAFT · assembled by ClauseIQ · 2026-04-19</div>
+          <div style="font-weight:600;margin-bottom:4px">6. TERMINATION.</div>
+          <div style="margin-bottom:4px"><b>6.1 Termination for Material Breach.</b> Either party may terminate this Agreement for material breach by the other party upon thirty (30) days' written notice, provided that the breaching party shall have such thirty (30) day period to cure the breach.</div>
+          <div style="font-family:var(--mono);font-size:9.5px;color:var(--accent);margin-bottom:10px">▸ Word comment: cited from Acme SaaS MSA §9.2 (executed 2023-06-14, N.Y. law)</div>
+          <div style="margin-bottom:4px"><b>6.2 Termination for Convenience.</b> Customer may terminate this Agreement for convenience upon sixty (60) days' prior written notice.</div>
+          <div style="font-family:var(--mono);font-size:9.5px;color:var(--accent);margin-bottom:10px">▸ Word comment: cited from Globex MSA §11.3</div>
+          <div style="font-weight:600;margin-bottom:4px">8. LIMITATION OF LIABILITY.</div>
+          <div>Except for breaches of confidentiality or indemnification obligations, each party's total aggregate liability shall not exceed the fees paid by Customer in the twelve (12) months preceding the claim.</div>
+          <div style="font-family:var(--mono);font-size:9.5px;color:var(--accent)">▸ Word comment: cited from Initech MSA §8.2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cap">07 · Export modal. Draft preview on the right shows exactly what the DOCX will look like; Word comments carry citations.</div>
+
+<!-- ========== 08 COMPONENT INVENTORY ========== -->
+<div class="scene-head">
+  <div class="scene-num">08</div>
+  <h2 class="scene-title">Component inventory &amp; tokens</h2>
+</div>
+<p class="scene-sub">The pieces an engineer builds first, and the tokens that wire them together. Keep flat, no nesting deeper than needed.</p>
+
+<div class="inv">
+  <div class="c">
+    <h6>Typography</h6>
+    <div class="tok">Inter — UI · 13px body</div>
+    <div class="tok">Fraunces — display · headers</div>
+    <div class="tok">JetBrains Mono — data, kbd</div>
+    <div class="tok" style="color:var(--ink-3);margin-top:10px">Scale: 10·11·12·13·15·17·20·28·52</div>
+  </div>
+  <div class="c">
+    <h6>Color · tokens</h6>
+    <div class="tok"><span class="sw" style="background:var(--bg)"></span>bg · paper</div>
+    <div class="tok"><span class="sw" style="background:var(--panel)"></span>panel</div>
+    <div class="tok"><span class="sw" style="background:var(--ink)"></span>ink</div>
+    <div class="tok"><span class="sw" style="background:var(--line)"></span>line · rule</div>
+    <div class="tok"><span class="sw" style="background:var(--accent)"></span>accent · indigo</div>
+    <div class="tok"><span class="sw" style="background:var(--good)"></span>good · signed</div>
+  </div>
+  <div class="c">
+    <h6>Keyboard map</h6>
+    <div class="tok"><span class="kbd">/</span> focus palette</div>
+    <div class="tok"><span class="kbd">⌘K</span> open palette</div>
+    <div class="tok"><span class="kbd">j</span> <span class="kbd">k</span> next / prev</div>
+    <div class="tok"><span class="kbd">p</span> pin · <span class="kbd">c</span> copy</div>
+    <div class="tok"><span class="kbd">o</span> open contract</div>
+    <div class="tok"><span class="kbd">⌘↵</span> export</div>
+    <div class="tok"><span class="kbd">esc</span> dismiss / back</div>
+  </div>
+  <div class="c">
+    <h6>Components · MVP</h6>
+    <div class="tok">• Topbar + Searchbar</div>
+    <div class="tok">• Filter rail / FilterOpt</div>
+    <div class="tok">• Result row</div>
+    <div class="tok">• Preview pane</div>
+    <div class="tok">• Scratchpad dock + tile</div>
+    <div class="tok">• Command palette</div>
+    <div class="tok">• Export modal</div>
+    <div class="tok">• Pill / Kbd / BarBtn</div>
+  </div>
+</div>
+
+<!-- ========== 09 NEXT ========== -->
+<div class="scene-head">
+  <div class="scene-num">09</div>
+  <h2 class="scene-title">What's next</h2>
+</div>
+<div class="two prose">
+  <div>
+    <h3 style="margin-top:0;font-weight:600">Interactive prototype</h3>
+    <p>Next deliverable: a working click-through built on these mockups. Real keyboard shortcuts, real pinning, real drill-in, palette fully functional. Fake but realistic clause data. Ready to demo and to user-test with 2–3 in-house lawyers.</p>
+    <p><strong>Success criteria:</strong> median time-to-first-pin under 60 seconds; queries per session ≥ 6 in a 15-minute task; zero users asking "where did my pinned clauses go?"</p>
+  </div>
+  <div>
+    <h3 style="margin-top:0;font-weight:600">Still open</h3>
+    <ul>
+      <li><strong>Scratchpad scope.</strong> Global vs per-matter. I lean per-matter; the dock would then show the current matter name.</li>
+      <li><strong>Citation style in DOCX.</strong> Word comments vs footnotes vs stripped. I lean comments — they delete cleanly.</li>
+      <li><strong>Family labels.</strong> Pretty ("Limitation of liability") or token ("limitation_of_liability"). I lean pretty for the main UI, token in the debug block.</li>
+      <li><strong>Result count.</strong> 20 is the API cap; I show 14 here after filters. Should we paginate if fewer filters return 20? I lean no; the reranker cuts it down.</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

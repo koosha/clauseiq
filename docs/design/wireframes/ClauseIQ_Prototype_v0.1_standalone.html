@@ -1,0 +1,1306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ClauseIQ — Interactive Prototype (standalone)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f6f3;
+    --panel:#fff;
+    --panel-2:#faf9f6;
+    --ink:#161614;
+    --ink-2:#2a2927;
+    --ink-3:#6b6a64;
+    --ink-4:#a5a39c;
+    --line:#e2dfd8;
+    --line-2:#eceae3;
+    --accent:oklch(0.52 0.09 275);
+    --accent-2:oklch(0.93 0.03 275);
+    --accent-3:oklch(0.78 0.08 275);
+    --good:oklch(0.55 0.09 150);
+    --warn:oklch(0.62 0.12 55);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,sans-serif;
+    --display:'Fraunces',Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;height:100%;overflow:hidden}
+  #root,.app{height:100%;display:flex;flex-direction:column}
+  button{font-family:inherit}
+  /* topbar */
+  .topbar{height:48px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);gap:12px;background:var(--panel);flex-shrink:0}
+  .brand{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em}
+  .brand .dot{color:var(--accent)}
+  .searchbar{flex:1;display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:7px 12px;font-family:var(--mono);font-size:12.5px;color:var(--ink-2);cursor:pointer;transition:.15s;max-width:720px}
+  .searchbar:hover{border-color:var(--ink-3);background:var(--panel)}
+  .searchbar .chev{color:var(--accent);font-weight:600}
+  .searchbar .qtxt{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:540px}
+  .searchbar .ph{color:var(--ink-4);flex:1}
+  .searchbar .sp{flex:1}
+  .kbd{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 5px;background:var(--bg);border:1px solid var(--line);border-radius:3px;color:var(--ink-2);letter-spacing:.04em;display:inline-block}
+  .bar-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line);background:var(--panel);border-radius:5px;font-size:12px;color:var(--ink-2);cursor:pointer;font-family:inherit;font-weight:500;white-space:nowrap}
+  .bar-btn:hover:not(:disabled){background:var(--bg);color:var(--ink)}
+  .bar-btn:disabled{opacity:.45;cursor:default}
+  .bar-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .bar-btn.primary:hover:not(:disabled){background:var(--ink-2)}
+  .bar-btn.active{background:var(--accent-2);color:var(--accent);border-color:var(--accent)}
+  .pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border:1px solid var(--line);border-radius:3px;color:var(--ink-3);background:var(--panel);font-weight:500;white-space:nowrap;display:inline-block}
+  .pill.fam{color:var(--accent);border-color:var(--accent-2);background:var(--accent-2);text-transform:none;letter-spacing:.02em}
+  .pill.ink{color:#fff;border-color:var(--ink);background:var(--ink)}
+  /* main */
+  .main{display:grid;grid-template-columns:220px 1fr 1.15fr;flex:1;min-height:0}
+  /* rail */
+  .rail{border-right:1px solid var(--line);background:var(--panel-2);overflow-y:auto}
+  .rail .grp{padding:14px 16px;border-bottom:1px solid var(--line-2)}
+  .rail h4{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+  .rail h4 .clear{color:var(--accent);font-family:var(--mono);font-size:9px;cursor:pointer;text-transform:none;letter-spacing:.05em}
+  .opt{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12.5px;color:var(--ink-2);cursor:pointer;line-height:1.3;user-select:none}
+  .opt:hover{color:var(--ink)}
+  .opt .count{font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+  .opt.sel{color:var(--ink);font-weight:600}
+  .opt.sel::before{content:"■ ";color:var(--accent);margin-right:2px}
+  .opt .more{color:var(--ink-4);font-family:var(--mono);font-size:10.5px}
+  /* results */
+  .results{border-right:1px solid var(--line);overflow-y:auto;background:var(--panel)}
+  .results-head{padding:10px 14px;border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--ink-3);position:sticky;top:0;background:var(--panel);z-index:1}
+  .results-head b{color:var(--ink)}
+  .results-head .sep{color:var(--ink-4)}
+  .filter-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line-2);background:var(--panel-2)}
+  .chip{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border:1px solid var(--accent-2);background:var(--accent-2);color:var(--accent);border-radius:3px;cursor:pointer}
+  .chip .x{margin-left:4px;opacity:.6}
+  .chip:hover .x{opacity:1}
+  .row{display:grid;grid-template-columns:24px 1fr auto;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line-2);align-items:start;cursor:pointer;transition:background .1s}
+  .row:hover{background:var(--bg)}
+  .row.sel{background:color-mix(in oklab,var(--accent) 7%,white);box-shadow:inset 3px 0 0 var(--accent)}
+  .row .idx{font-family:var(--mono);font-size:11px;color:var(--ink-4);padding-top:2px}
+  .row .head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+  .row .title{font-weight:600;color:var(--ink);font-size:13px;letter-spacing:-.005em}
+  .row .ctx{font-size:11.5px;color:var(--ink-3);font-family:var(--mono);margin-bottom:4px}
+  .row .ctx b{color:var(--ink-2);font-weight:600}
+  .row .clause{color:var(--ink-2);line-height:1.5;font-size:12.5px}
+  .row .clause mark{background:color-mix(in oklab,var(--accent) 22%,white);color:var(--ink);padding:0 2px;border-radius:2px}
+  .row .meta{margin-top:6px;display:flex;gap:6px;align-items:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-4)}
+  .row .meta b{color:var(--ink-2)}
+  .row .meta .sep{color:var(--ink-4)}
+  .row .act{display:flex;gap:4px;flex-direction:column}
+  .row .act button{font-family:var(--mono);font-size:11px;padding:3px 6px;border:1px solid var(--line);background:var(--panel);border-radius:3px;color:var(--ink-2);cursor:pointer;line-height:1}
+  .row .act button:hover{background:var(--bg);color:var(--ink)}
+  .row .act button.pinned{background:var(--accent-2);color:var(--accent);border-color:var(--accent)}
+  /* preview */
+  .preview{display:flex;flex-direction:column;background:var(--panel);overflow:hidden}
+  .preview-head{padding:10px 16px;border-bottom:1px solid var(--line-2);background:var(--panel-2);display:flex;gap:8px;align-items:center;flex-shrink:0}
+  .preview-head .trail{font-family:var(--mono);font-size:11px;color:var(--ink-3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .preview-head .trail b{color:var(--ink)}
+  .preview-body{padding:22px 28px;overflow-y:auto;flex:1}
+  .preview-body .doc-top{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-3);margin-bottom:4px;text-transform:uppercase}
+  .preview-body h2{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em;margin:0 0 18px}
+  .preview-body .ctx-line{color:var(--ink-3);font-size:12.5px;line-height:1.75;margin-bottom:12px}
+  .preview-body .ctx-line b{color:var(--ink-2)}
+  .preview-body .focal{background:color-mix(in oklab,var(--accent) 10%,white);border-left:3px solid var(--accent);padding:16px 20px;margin:4px -20px;border-radius:0 4px 4px 0}
+  .preview-body .focal .tag{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:8px;text-transform:uppercase;font-weight:600}
+  .preview-body .focal .txt{color:var(--ink);font-size:13.5px;line-height:1.75}
+  .preview-body .focal .txt mark{background:color-mix(in oklab,var(--accent) 28%,white);padding:0 2px;border-radius:2px}
+  .preview-foot{padding:8px 16px;border-top:1px solid var(--line-2);font-family:var(--mono);font-size:10.5px;color:var(--ink-4);display:flex;gap:8px;align-items:center;flex-shrink:0;background:var(--panel-2)}
+  .preview-foot b{color:var(--ink-2)}
+  .preview-foot .sep{color:var(--ink-4)}
+  /* dock */
+  .dock{border-top:1.5px solid var(--ink);background:var(--panel-2);flex-shrink:0;max-height:200px;display:flex;flex-direction:column}
+  .dock.collapsed{max-height:42px}
+  .dock-head{padding:8px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line-2);flex-shrink:0}
+  .dock-head .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .dock-empty{padding:18px;color:var(--ink-3);font-size:12.5px}
+  .dock-empty .kbd{margin:0 2px}
+  .dock-tiles{padding:10px 16px;display:flex;gap:10px;overflow-x:auto;flex:1}
+  .tile{min-width:240px;max-width:240px;background:color-mix(in oklab,var(--accent) 5%,white);border:1px solid var(--accent-2);border-radius:4px;padding:9px 12px;font-size:12px;flex-shrink:0;cursor:pointer;transition:border-color .15s}
+  .tile:hover{border-color:var(--accent)}
+  .tile .th{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:6px}
+  .tile .tt{font-weight:600;color:var(--ink);font-size:12px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tile .x{color:var(--ink-4);font-family:var(--mono);font-size:14px;cursor:pointer;flex-shrink:0;line-height:1}
+  .tile .x:hover{color:var(--ink)}
+  .tile .tm{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-bottom:4px}
+  .tile .tx{font-size:11.5px;color:var(--ink-3);line-height:1.4;max-height:42px;overflow:hidden}
+  /* palette */
+  .pal-scrim{position:fixed;inset:0;background:rgba(22,22,20,.45);display:flex;align-items:flex-start;justify-content:center;padding-top:100px;backdrop-filter:blur(4px);z-index:50}
+  .pal{width:640px;max-width:90%;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 30px 60px -10px rgba(0,0,0,.35);overflow:hidden}
+  .pal-input{padding:14px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+  .pal-input .chev{color:var(--accent);font-family:var(--mono);font-weight:600;font-size:15px}
+  .pal-q{flex:1;font-family:var(--mono);font-size:14px;color:var(--ink);background:transparent;border:none;outline:none}
+  .pal-q::placeholder{color:var(--ink-4)}
+  .pal-list{max-height:380px;overflow-y:auto}
+  .pal-grp{padding:4px 0}
+  .pal-grp h6{padding:10px 18px 4px;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin:0;font-weight:600}
+  .pal-item{padding:8px 18px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2);cursor:pointer}
+  .pal-item.sel{background:color-mix(in oklab,var(--accent) 7%,white);color:var(--ink)}
+  .pal-item .ic{font-family:var(--mono);color:var(--ink-3);width:14px;text-align:center}
+  .pal-item.sel .ic{color:var(--accent)}
+  .pal-item .lbl{flex:1}
+  .pal-item .sp{flex:1}
+  .pal-foot{padding:8px 18px;border-top:1px solid var(--line-2);font-family:var(--mono);font-size:10.5px;color:var(--ink-3);background:var(--panel-2);display:flex;gap:14px;align-items:center}
+  /* modal scrim shared */
+  .modal-scrim{position:fixed;inset:0;background:rgba(22,22,20,.55);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:60;padding:24px}
+  /* contract viewer */
+  .cv{background:var(--panel);border-radius:10px;box-shadow:0 40px 80px -10px rgba(0,0,0,.45);width:1180px;max-width:100%;height:88vh;display:flex;flex-direction:column;overflow:hidden}
+  .cv-top{padding:10px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;background:var(--panel-2);flex-shrink:0}
+  .cv-trail{flex:1;font-family:var(--mono);font-size:11.5px;color:var(--ink-3);overflow:hidden;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .cv-trail b{color:var(--ink)}
+  .cv-trail .sep{color:var(--ink-4)}
+  .cv-back{color:var(--accent);cursor:pointer;font-weight:500}
+  .cv-back:hover{text-decoration:underline}
+  .cv-actions{display:flex;gap:6px}
+  .cv-body{flex:1;display:grid;grid-template-columns:280px 1fr;min-height:0}
+  .cv-meta{border-right:1px solid var(--line);padding:18px 20px;overflow-y:auto;background:var(--panel-2);font-size:12.5px}
+  .cv-meta .mk{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;font-weight:600}
+  .cv-meta .mv{color:var(--ink);margin-bottom:12px;line-height:1.4}
+  .cv-meta .mv.mono{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+  .cv-sibs{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+  .sib{display:block;padding:6px 8px;border-radius:3px;font-size:12px;color:var(--ink-2);cursor:pointer;text-decoration:none;border-left:2px solid transparent}
+  .sib:hover{background:var(--bg)}
+  .sib.cur{background:var(--accent-2);border-left-color:var(--accent);color:var(--ink);font-weight:500}
+  .sib .sn{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-right:8px}
+  .sib.cur .sn{color:var(--accent)}
+  .cv-doc{overflow-y:auto;padding:32px 60px 80px;background:var(--panel)}
+  .doc-head-fake{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+  .dh-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase}
+  .dh-title{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.01em;margin:6px 0 4px}
+  .dh-sub{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .doc-sec{padding:16px 0;border-bottom:1px dashed var(--line-2);scroll-margin-top:24px}
+  .doc-sec.faded{opacity:.45}
+  .doc-sec.focal{background:color-mix(in oklab,var(--accent) 8%,white);border-left:3px solid var(--accent);padding:18px 24px;margin:8px -24px;border-radius:0 4px 4px 0;border-bottom:none}
+  .ds-head{display:flex;gap:10px;align-items:baseline;margin-bottom:8px}
+  .ds-num{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);font-weight:600;min-width:50px}
+  .doc-sec.focal .ds-num{color:var(--accent)}
+  .ds-title{font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink);letter-spacing:-.005em}
+  .ds-tag{font-family:var(--mono);font-size:9.5px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;background:var(--accent-2);padding:2px 6px;border-radius:3px;margin-left:auto}
+  .ds-body{font-family:var(--display);font-size:13.5px;line-height:1.75;color:var(--ink-2)}
+  .doc-sec.focal .ds-body{color:var(--ink)}
+  /* export modal */
+  .export{background:var(--panel);border-radius:10px;box-shadow:0 40px 80px -10px rgba(0,0,0,.45);width:1180px;max-width:100%;height:88vh;display:flex;flex-direction:column;overflow:hidden}
+  .export-body{flex:1;display:grid;grid-template-columns:1.1fr 1fr;min-height:0}
+  .ex-left{border-right:1px solid var(--line);padding:18px 22px;overflow-y:auto}
+  .ex-eyebrow{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+  .ex-grp{margin-bottom:14px}
+  .ex-grp-head{font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink);margin-bottom:8px;display:flex;align-items:baseline;gap:8px}
+  .ex-grp-head .ex-count{font-family:var(--mono);font-size:10.5px;color:var(--ink-4);font-weight:500}
+  .ex-tile{background:color-mix(in oklab,var(--accent) 4%,white);border:1px solid var(--accent-2);border-radius:4px;padding:9px 12px;margin-bottom:6px}
+  .ex-th{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:8px}
+  .ex-tt{font-weight:600;color:var(--ink);font-size:12.5px}
+  .ex-tm{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
+  .ex-tx{font-size:11.5px;color:var(--ink-3);line-height:1.45;max-height:60px;overflow:hidden}
+  .ex-right{background:var(--panel-2);padding:22px;overflow:hidden;display:flex;flex-direction:column}
+  .ex-controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .ex-preview{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:28px 36px;font-family:var(--display);font-size:12.5px;line-height:1.7;color:var(--ink-2);flex:1;overflow-y:auto;box-shadow:0 8px 24px -12px rgba(0,0,0,.15)}
+  .ep-title{font-weight:600;font-size:15px;color:var(--ink);text-align:center;margin-bottom:12px;letter-spacing:.02em}
+  .ep-sub{color:var(--ink-3);font-size:10.5px;text-align:center;margin-bottom:22px;font-family:var(--mono);letter-spacing:.06em}
+  .ep-sec{margin-bottom:14px}
+  .ep-h{font-weight:600;margin-bottom:6px}
+  .ep-p{margin-bottom:6px}
+  .ep-cite{font-family:var(--mono);font-size:9.5px;color:var(--accent);margin-bottom:8px}
+  /* zero */
+  .zero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;color:var(--ink-3);height:100%}
+  .zero .ic{width:48px;height:48px;border:1.5px dashed var(--ink-3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:22px;color:var(--ink-3);margin-bottom:16px}
+  .zero h3{font-family:var(--display);font-weight:500;font-size:19px;color:var(--ink);margin:0 0 6px;letter-spacing:-.01em}
+  .zero p{margin:0;font-size:13px;max-width:300px;line-height:1.5}
+  /* empty home */
+  .empty-home{padding:48px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+  .eh-title{font-family:var(--display);font-size:26px;font-weight:500;letter-spacing:-.01em;color:var(--ink);line-height:1.15;max-width:340px}
+  .eh-sub{color:var(--ink-3);font-size:13px;max-width:360px;line-height:1.55}
+  .eh-tries{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;justify-content:center;max-width:380px}
+  .eh-tries .pill{cursor:default}
+  .eh-kbd{margin-top:24px;padding:14px 18px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:6px;max-width:380px;text-align:left}
+  .ehk-head{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+  .ehk-rows{font-size:12.5px;line-height:1.7;color:var(--ink-2);font-family:var(--mono)}
+  /* paste banner */
+  .paste-banner{padding:14px 16px;background:color-mix(in oklab,var(--accent) 6%,white);border-bottom:1px solid var(--accent-2)}
+  .pb-eyebrow{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px;text-transform:uppercase;font-weight:600}
+  .pb-text{font-size:12.5px;line-height:1.6;color:var(--ink);font-family:var(--display);margin-bottom:8px}
+  /* shimmer */
+  @keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}
+  .shim{background:linear-gradient(90deg,var(--line-2) 0%,var(--line) 50%,var(--line-2) 100%);background-size:400px 100%;animation:shimmer 1.4s infinite;border-radius:3px;height:10px}
+  /* toast */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 16px;border-radius:6px;font-size:12.5px;font-weight:500;z-index:100;box-shadow:0 12px 30px -8px rgba(0,0,0,.4);animation:tin .15s ease-out}
+  @keyframes tin{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react">
+// === proto/data.jsx ===
+// ClauseIQ prototype — fake corpus + naive retrieval.
+// Good-enough to feel real, not a benchmark.
+
+const CONTRACTS = [
+  { id:"acme",     title:"Acme SaaS MSA",          counterparty:"Acme Corp",        signed:"2023-06-14", law:"New York",   pages:38 },
+  { id:"globex",   title:"Globex Master Agreement", counterparty:"Globex Inc.",      signed:"2024-02-20", law:"New York",   pages:42 },
+  { id:"initech",  title:"Initech Services MSA",   counterparty:"Initech LLC",      signed:"2022-11-03", law:"New York",   pages:31 },
+  { id:"hooli",    title:"Hooli Platform MSA",     counterparty:"Hooli",            signed:"2023-09-09", law:"California", pages:54 },
+  { id:"piedpiper",title:"Pied Piper SaaS MSA",    counterparty:"Pied Piper",       signed:"2024-01-15", law:"New York",   pages:27 },
+  { id:"sterling", title:"Sterling Cooper MSA",    counterparty:"Sterling Cooper",  signed:"2023-03-30", law:"Delaware",   pages:36 },
+  { id:"vandelay", title:"Vandelay Industries MSA",counterparty:"Vandelay Ind.",    signed:"2022-08-22", law:"New York",   pages:29 },
+  { id:"dunder",   title:"Dunder Mifflin SaaS",    counterparty:"Dunder Mifflin",   signed:"2024-05-04", law:"Pennsylvania", pages:33 },
+];
+
+const FAMILIES = [
+  ["limitation_of_liability","Limitation of liability"],
+  ["indemnification",        "Indemnification"],
+  ["confidentiality",        "Confidentiality"],
+  ["termination",            "Termination"],
+  ["payment_terms",          "Payment terms"],
+  ["fees_pricing",           "Fees & pricing"],
+  ["term_renewal",           "Term & renewal"],
+  ["warranties",             "Warranties & disclaimers"],
+  ["governing_law",          "Governing law"],
+  ["assignment",             "Assignment"],
+  ["force_majeure",          "Force majeure"],
+  ["data_security",          "Data security"],
+];
+
+const CLAUSES = [
+  // Limitation of liability
+  { id:"cl_001", contract:"initech", section:"§8.2", title:"Cap at 12 months of fees", family:"limitation_of_liability",
+    text:"Except for breaches of confidentiality or indemnification obligations, each party's total aggregate liability arising out of or relating to this Agreement shall not exceed the fees paid by Customer in the twelve (12) months preceding the event giving rise to the claim.",
+    article:"Article 8 — Warranties & Liability", pages:"14–15" },
+  { id:"cl_002", contract:"acme", section:"§8.3", title:"Liability cap with IP indemnity carve-out", family:"limitation_of_liability",
+    text:"Notwithstanding the foregoing, the liability cap in Section 8.2 shall not apply to (i) a party's indemnification obligations for third-party intellectual property claims, (ii) breaches of confidentiality, or (iii) a party's gross negligence or willful misconduct.",
+    article:"Article 8 — Liability", pages:"19" },
+  { id:"cl_003", contract:"globex", section:"§9.1", title:"Mutual liability cap, greater-of formula", family:"limitation_of_liability",
+    text:"Each party's aggregate liability under this Agreement shall not exceed the greater of (a) twelve (12) months of fees paid by Customer in the twelve months preceding the claim or (b) five hundred thousand dollars ($500,000).",
+    article:"Article 9 — Liability", pages:"22–23" },
+  { id:"cl_004", contract:"piedpiper", section:"§7.4", title:"Exclusion of indirect damages", family:"limitation_of_liability",
+    text:"In no event shall either party be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, even if advised of the possibility of such damages.",
+    article:"Article 7 — Liability", pages:"12" },
+  { id:"cl_005", contract:"sterling", section:"§8.4", title:"Super-cap for gross negligence", family:"limitation_of_liability",
+    text:"The liability cap set forth in Section 8.2 shall be increased to three (3) times the fees paid in the prior twelve months for claims arising out of a party's gross negligence or willful misconduct.",
+    article:"Article 8 — Liability", pages:"17" },
+  { id:"cl_006", contract:"hooli", section:"§8.5", title:"Uncapped obligations carve-out", family:"limitation_of_liability",
+    text:"Nothing in this Agreement shall limit a party's liability for (a) fraud or fraudulent misrepresentation; (b) death or personal injury caused by negligence; (c) breaches of Section 11 (Confidentiality); or (d) payment of undisputed fees.",
+    article:"Article 8 — Liability", pages:"24" },
+  { id:"cl_007", contract:"vandelay", section:"§8.1", title:"Single-party cap (vendor only)", family:"limitation_of_liability",
+    text:"Vendor's total aggregate liability shall not exceed the fees paid by Customer in the twelve (12) months preceding the claim. Customer's liability shall be uncapped for amounts owed for services rendered under any Order Form.",
+    article:"Article 8 — Liability", pages:"15" },
+
+  // Termination
+  { id:"cl_010", contract:"acme", section:"§9.2", title:"Termination for material breach (30-day cure)", family:"termination",
+    text:"Either party may terminate this Agreement for material breach by the other party upon thirty (30) days' written notice, provided that the breaching party shall have such thirty (30) day period to cure the breach to the reasonable satisfaction of the non-breaching party.",
+    article:"Article 9 — Term & Termination", pages:"20" },
+  { id:"cl_011", contract:"globex", section:"§11.3", title:"Termination for convenience (60 days)", family:"termination",
+    text:"Customer may terminate this Agreement for convenience upon sixty (60) days' prior written notice to Vendor, with no early termination fee.",
+    article:"Article 11 — Termination", pages:"26" },
+  { id:"cl_012", contract:"hooli", section:"§5.4", title:"Termination on insolvency", family:"termination",
+    text:"Either party may terminate this Agreement immediately upon written notice if the other party becomes insolvent, makes a general assignment for the benefit of creditors, or files a petition in bankruptcy.",
+    article:"Article 5 — Term & Termination", pages:"15" },
+  { id:"cl_013", contract:"dunder", section:"§10.2", title:"Effect of termination — survival", family:"termination",
+    text:"Upon termination of this Agreement, the following provisions shall survive: Sections 8 (Confidentiality), 9 (Limitation of Liability), 12 (Indemnification), and any payment obligations accrued prior to termination.",
+    article:"Article 10 — Termination", pages:"22" },
+
+  // Confidentiality
+  { id:"cl_020", contract:"acme", section:"§11.1", title:"Confidentiality with 5-year survival", family:"confidentiality",
+    text:"Each party shall hold in confidence all Confidential Information disclosed by the other party and shall not use such information except as required to perform this Agreement. The obligations under this Section shall survive for five (5) years following termination of this Agreement.",
+    article:"Article 11 — Confidentiality", pages:"28" },
+  { id:"cl_021", contract:"globex", section:"§11.2", title:"Mutual NDA-style confidentiality", family:"confidentiality",
+    text:"Each Party shall use the same degree of care to protect the other Party's Confidential Information as it uses to protect its own, but in no event less than reasonable care. This obligation shall survive for a period of three (3) years.",
+    article:"Article 11 — Confidentiality", pages:"30" },
+  { id:"cl_022", contract:"initech", section:"§10.1", title:"Perpetual obligation for trade secrets", family:"confidentiality",
+    text:"The confidentiality obligations under this Section shall survive for five (5) years, provided that with respect to trade secrets, such obligation shall continue for as long as the information qualifies as a trade secret under applicable law.",
+    article:"Article 10 — Confidentiality", pages:"21" },
+
+  // Payment / fees
+  { id:"cl_030", contract:"acme", section:"§4.1", title:"Net-30 payment terms", family:"payment_terms",
+    text:"Customer shall pay all undisputed invoices within thirty (30) days of receipt. Late payments shall accrue interest at the lesser of 1.5% per month or the maximum rate permitted by law.",
+    article:"Article 4 — Fees & Payment", pages:"8" },
+  { id:"cl_031", contract:"globex", section:"§3.1", title:"Subscription fees", family:"fees_pricing",
+    text:"Customer shall pay Vendor subscription fees as set forth in the applicable Order Form. Subscription fees are non-refundable except as expressly provided herein.",
+    article:"Article 3 — Fees", pages:"7" },
+  { id:"cl_032", contract:"hooli", section:"§3.4", title:"Annual price increase cap (5%)", family:"fees_pricing",
+    text:"Vendor may increase fees upon renewal by no more than five percent (5%) over the fees in the prior term, provided Vendor gives Customer at least sixty (60) days' written notice prior to renewal.",
+    article:"Article 3 — Fees", pages:"9" },
+
+  // Term & renewal
+  { id:"cl_040", contract:"hooli", section:"§5.1", title:"36-month initial term, 12-month auto-renewal", family:"term_renewal",
+    text:"The initial term of this Agreement shall be thirty-six (36) months from the Effective Date. Thereafter, this Agreement shall automatically renew for successive twelve (12) month terms unless either party gives written notice of non-renewal at least sixty (60) days prior to the end of the then-current term.",
+    article:"Article 5 — Term", pages:"12" },
+  { id:"cl_041", contract:"acme", section:"§2.1", title:"Initial 1-year term, opt-in renewal", family:"term_renewal",
+    text:"The initial term of this Agreement is one (1) year. Renewal shall require mutual written agreement of the parties; this Agreement shall not auto-renew.",
+    article:"Article 2 — Term", pages:"4" },
+
+  // Indemnification
+  { id:"cl_050", contract:"acme", section:"§10.1", title:"Vendor IP indemnification", family:"indemnification",
+    text:"Vendor shall defend, indemnify, and hold harmless Customer from and against any third-party claim alleging that the Service infringes or misappropriates such third party's intellectual property rights, and shall pay any damages finally awarded against Customer.",
+    article:"Article 10 — Indemnification", pages:"24" },
+  { id:"cl_051", contract:"globex", section:"§10.2", title:"Customer indemnification for misuse", family:"indemnification",
+    text:"Customer shall indemnify Vendor against any third-party claim arising from Customer's use of the Service in violation of this Agreement or applicable law, including misuse of Customer Data.",
+    article:"Article 10 — Indemnification", pages:"25" },
+
+  // Warranties
+  { id:"cl_060", contract:"initech", section:"§7.1", title:"Service warranty (30 days)", family:"warranties",
+    text:"Vendor warrants that the Service will perform substantially in accordance with the Documentation for a period of thirty (30) days following the Effective Date. Customer's exclusive remedy for breach of this warranty shall be re-performance or, if Vendor cannot re-perform, refund of fees paid for the affected Service.",
+    article:"Article 7 — Warranties", pages:"13" },
+  { id:"cl_061", contract:"vandelay", section:"§7.2", title:"As-is disclaimer", family:"warranties",
+    text:"EXCEPT AS EXPRESSLY SET FORTH HEREIN, THE SERVICE IS PROVIDED \"AS IS\" AND VENDOR DISCLAIMS ALL OTHER WARRANTIES, EXPRESS OR IMPLIED, INCLUDING ANY WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.",
+    article:"Article 7 — Warranties", pages:"14" },
+
+  // Governing law
+  { id:"cl_070", contract:"acme", section:"§14.1", title:"NY law, SDNY venue", family:"governing_law",
+    text:"This Agreement shall be governed by the laws of the State of New York, without regard to its conflict of laws principles. The parties consent to the exclusive jurisdiction of the state and federal courts located in New York County, New York.",
+    article:"Article 14 — General", pages:"35" },
+  { id:"cl_071", contract:"hooli", section:"§14.1", title:"California law, JAMS arbitration", family:"governing_law",
+    text:"This Agreement shall be governed by the laws of the State of California. Any dispute arising under this Agreement shall be resolved by binding arbitration administered by JAMS in San Francisco, California.",
+    article:"Article 14 — General", pages:"50" },
+
+  // Assignment
+  { id:"cl_080", contract:"globex", section:"§13.1", title:"No assignment without consent (M&A carve-out)", family:"assignment",
+    text:"Neither party may assign this Agreement without the prior written consent of the other party, except that either party may assign this Agreement to a successor in interest in connection with a merger, acquisition, or sale of all or substantially all of its assets, upon written notice.",
+    article:"Article 13 — General", pages:"38" },
+
+  // Force majeure
+  { id:"cl_090", contract:"sterling", section:"§14.5", title:"Standard force majeure", family:"force_majeure",
+    text:"Neither party shall be liable for any failure or delay in performance under this Agreement to the extent such failure or delay is caused by circumstances beyond its reasonable control, including acts of God, war, terrorism, pandemic, government action, or failure of utilities or telecommunications.",
+    article:"Article 14 — General", pages:"32" },
+
+  // Data security
+  { id:"cl_100", contract:"hooli", section:"§12.1", title:"SOC 2 + breach notification (72 hrs)", family:"data_security",
+    text:"Vendor shall maintain a SOC 2 Type II certified information security program and shall notify Customer of any confirmed Security Incident affecting Customer Data within seventy-two (72) hours of discovery.",
+    article:"Article 12 — Security", pages:"40" },
+  { id:"cl_101", contract:"dunder", section:"§9.3", title:"Encryption in transit and at rest", family:"data_security",
+    text:"Vendor shall encrypt all Customer Data in transit using TLS 1.2 or higher and at rest using AES-256 or equivalent industry-standard encryption.",
+    article:"Article 9 — Security", pages:"19" },
+];
+
+// --- Naive but plausible retrieval -----------------------------------------
+const STOP = new Set("a an the of for to and or in on at by with from as is be are this that".split(" "));
+
+function tokenize(s){ return (s||"").toLowerCase().match(/[a-z0-9]+/g)?.filter(t=>!STOP.has(t)&&t.length>1) || []; }
+
+// Synonym boosts so "cap on liability" matches "aggregate liability"
+const SYNONYMS = {
+  cap:["aggregate","limit","limited","capped"],
+  liability:["liable","damages"],
+  fees:["fee","payment","paid"],
+  twelve:["12"],
+  months:["month","mo"],
+  ip:["intellectual","property"],
+  carve:["exclusion","exclude"],
+  termination:["terminate","terminated"],
+  breach:["material","breached"],
+  cure:["period"],
+  convenience:["without","cause"],
+  confidentiality:["confidential","nda"],
+  renewal:["renew","auto"],
+  notice:["written"],
+};
+
+function expandedTokens(q){
+  const base = tokenize(q);
+  const out = new Set(base);
+  base.forEach(t => (SYNONYMS[t]||[]).forEach(s => out.add(s)));
+  return [...out];
+}
+
+function scoreClause(clause, qTokens){
+  const text = (clause.text + " " + clause.title).toLowerCase();
+  let s = 0, matched = new Set();
+  qTokens.forEach(t => {
+    const re = new RegExp("\\b" + t + "\\b", "g");
+    const m = text.match(re);
+    if (m) { s += m.length * (t.length>3?1.4:1); matched.add(t); }
+  });
+  // Family hint: if query contains family token, big boost
+  const fam = clause.family.replace(/_/g," ");
+  qTokens.forEach(t => { if (fam.includes(t)) s += 2; });
+  // Length-normalize lightly
+  s = s / (1 + Math.log(text.length/200));
+  return { score: s, matched: [...matched] };
+}
+
+function search(query, filters){
+  const qTokens = expandedTokens(query);
+  let candidates = CLAUSES;
+  if (filters.family && filters.family.length) {
+    candidates = candidates.filter(c => filters.family.includes(c.family));
+  }
+  if (filters.law && filters.law.length) {
+    candidates = candidates.filter(c => {
+      const ct = CONTRACTS.find(x => x.id===c.contract);
+      return ct && filters.law.includes(ct.law);
+    });
+  }
+  if (filters.counterparty && filters.counterparty.length) {
+    candidates = candidates.filter(c => {
+      const ct = CONTRACTS.find(x => x.id===c.contract);
+      return ct && filters.counterparty.includes(ct.counterparty);
+    });
+  }
+  if (!query.trim() && (!filters.family || !filters.family.length) && (!filters.law||!filters.law.length) && (!filters.counterparty||!filters.counterparty.length)) {
+    return [];
+  }
+  const scored = candidates.map(c => {
+    const { score, matched } = qTokens.length ? scoreClause(c, qTokens) : { score: 1, matched: [] };
+    const ct = CONTRACTS.find(x => x.id===c.contract);
+    const norm = Math.min(0.99, 0.55 + score/8);
+    return { clause:c, contract:ct, score: query.trim() ? norm : 0.5, matched };
+  });
+  let results = qTokens.length ? scored.filter(r => r.score > 0.55) : scored;
+  results.sort((a,b)=>b.score-a.score);
+  return results.slice(0, 20);
+}
+
+function highlight(text, tokens){
+  if (!tokens || !tokens.length) return [{text, hit:false}];
+  const re = new RegExp("\\b(" + tokens.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|") + ")\\b","gi");
+  const parts = [];
+  let last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push({text: text.slice(last, m.index), hit:false});
+    parts.push({text: m[0], hit:true});
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push({text: text.slice(last), hit:false});
+  return parts;
+}
+
+function familyLabel(token){ return (FAMILIES.find(f=>f[0]===token)||[token,token])[1]; }
+
+function familyCounts(){
+  const out = {};
+  FAMILIES.forEach(([k])=>out[k]=0);
+  CLAUSES.forEach(c => { out[c.family] = (out[c.family]||0)+1; });
+  return out;
+}
+function lawCounts(){
+  const out = {};
+  CLAUSES.forEach(c => {
+    const ct = CONTRACTS.find(x=>x.id===c.contract);
+    if (ct) out[ct.law] = (out[ct.law]||0)+1;
+  });
+  return out;
+}
+function counterpartyCounts(){
+  const out = {};
+  CLAUSES.forEach(c => {
+    const ct = CONTRACTS.find(x=>x.id===c.contract);
+    if (ct) out[ct.counterparty] = (out[ct.counterparty]||0)+1;
+  });
+  return out;
+}
+
+Object.assign(window, {
+  CONTRACTS, CLAUSES, FAMILIES,
+  search, highlight, expandedTokens,
+  familyLabel, familyCounts, lawCounts, counterpartyCounts,
+});
+
+</script>
+<script type="text/babel" data-presets="react">
+// === proto/palette.jsx ===
+// Command palette — ⌘K / / opens it.
+const { useState, useEffect, useRef, useMemo } = React;
+
+function CommandPalette({ open, onClose, onRunQuery, onPasteMatch, recentQueries, currentQuery }){
+  const [q, setQ] = useState(currentQuery || "");
+  const [sel, setSel] = useState(0);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (open) {
+      setQ(currentQuery || "");
+      setSel(0);
+      setTimeout(() => inputRef.current?.focus(), 30);
+    }
+  }, [open, currentQuery]);
+
+  const items = useMemo(() => {
+    const list = [];
+    const trimmed = q.trim();
+    if (trimmed) {
+      list.push({ kind:"run", label:`Search clauses for "${trimmed}"`, kbd:"↵", action:() => onRunQuery(trimmed) });
+      list.push({ kind:"paste", label:`Paste as draft clause → find similar`, kbd:"⇧↵", action:() => onPasteMatch(trimmed) });
+      // scoped
+      const lower = trimmed.toLowerCase();
+      const matchedFams = window.FAMILIES.filter(([k,l]) => lower.split(/\s+/).some(t => k.includes(t) || l.toLowerCase().includes(t))).slice(0,2);
+      matchedFams.forEach(([k,l]) => {
+        list.push({ kind:"scoped-fam", label:`Search only ${l}`, kbd:"", action:() => onRunQuery(trimmed, { family:[k] }) });
+      });
+      if (/\b(ny|new york)\b/i.test(trimmed)) list.push({ kind:"scoped-law", label:`Scope to New York governing law`, action:() => onRunQuery(trimmed, { law:["New York"] }) });
+      if (/\b(ca|california)\b/i.test(trimmed)) list.push({ kind:"scoped-law", label:`Scope to California governing law`, action:() => onRunQuery(trimmed, { law:["California"] }) });
+    } else {
+      // No query — show families to browse
+      window.FAMILIES.slice(0,6).forEach(([k,l]) => {
+        list.push({ kind:"browse", label:`Browse ${l}`, action:() => onRunQuery("", { family:[k] }) });
+      });
+    }
+    // Recent
+    (recentQueries||[]).slice(0,3).forEach(r => {
+      if (r !== trimmed) list.push({ kind:"recent", label:r, action:() => onRunQuery(r) });
+    });
+    return list;
+  }, [q, recentQueries, onRunQuery, onPasteMatch]);
+
+  useEffect(() => { setSel(s => Math.min(s, Math.max(0, items.length-1))); }, [items.length]);
+
+  if (!open) return null;
+
+  function onKey(e){
+    if (e.key === "Escape") { e.preventDefault(); onClose(); return; }
+    if (e.key === "ArrowDown") { e.preventDefault(); setSel(s => Math.min(items.length-1, s+1)); return; }
+    if (e.key === "ArrowUp")   { e.preventDefault(); setSel(s => Math.max(0, s-1)); return; }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const item = items[sel] || items[0];
+      if (item) { item.action(); onClose(); }
+    }
+  }
+
+  // group by kind for headers
+  const groups = [];
+  let last = null;
+  items.forEach((it, i) => {
+    const head = ({run:"Run query", paste:"Run query", "scoped-fam":"Scoped", "scoped-law":"Scoped", browse:"Browse", recent:"Recent"})[it.kind];
+    if (head !== last) { groups.push({head, items:[]}); last = head; }
+    groups[groups.length-1].items.push({...it, _i:i});
+  });
+
+  return (
+    <div className="pal-scrim" onClick={onClose}>
+      <div className="pal" onClick={e=>e.stopPropagation()}>
+        <div className="pal-input">
+          <span className="chev">&gt;</span>
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={e=>setQ(e.target.value)}
+            onKeyDown={onKey}
+            placeholder="Describe the clause you want, or paste draft language…"
+            className="pal-q"
+          />
+          <span className="kbd">esc</span>
+        </div>
+        <div className="pal-list">
+          {groups.map((g, gi) => (
+            <div className="pal-grp" key={gi}>
+              {g.head && <h6>{g.head}</h6>}
+              {g.items.map(it => (
+                <div
+                  key={it._i}
+                  className={"pal-item" + (it._i===sel ? " sel":"")}
+                  onMouseEnter={()=>setSel(it._i)}
+                  onClick={()=>{ it.action(); onClose(); }}
+                >
+                  <span className="ic">
+                    {it.kind==="run" && "⌕"}
+                    {it.kind==="paste" && "¶"}
+                    {it.kind==="scoped-fam" && "#"}
+                    {it.kind==="scoped-law" && "§"}
+                    {it.kind==="browse" && "▸"}
+                    {it.kind==="recent" && "↻"}
+                  </span>
+                  <span className="lbl">{it.label}</span>
+                  <span className="sp"></span>
+                  {it.kbd && <span className="kbd">{it.kbd}</span>}
+                </div>
+              ))}
+            </div>
+          ))}
+          {!items.length && (
+            <div className="pal-grp"><div className="pal-item" style={{color:"var(--ink-3)"}}>No matches.</div></div>
+          )}
+        </div>
+        <div className="pal-foot">
+          <span><span className="kbd">↑</span> <span className="kbd">↓</span> navigate</span>
+          <span><span className="kbd">↵</span> select</span>
+          <span style={{flex:1}}></span>
+          <span>ClauseIQ · palette</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.CommandPalette = CommandPalette;
+
+</script>
+<script type="text/babel" data-presets="react">
+// === proto/viewer.jsx ===
+// Contract viewer (drill-in) and Export modal.
+const { useEffect: useEffect_v, useState: useState_v } = React;
+
+function ContractViewer({ clauseId, onClose, onPin, isPinned }){
+  const clause = window.CLAUSES.find(c => c.id === clauseId);
+  if (!clause) return null;
+  const contract = window.CONTRACTS.find(c => c.id === clause.contract);
+
+  // Surrounding clauses from same contract
+  const sibs = window.CLAUSES.filter(c => c.contract === contract.id);
+  const idx = sibs.findIndex(c => c.id === clauseId);
+
+  useEffect_v(() => {
+    function onKey(e){
+      if (e.key === "Escape") { e.preventDefault(); onClose(); }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  function copyText(){
+    navigator.clipboard?.writeText(clause.text);
+  }
+
+  return (
+    <div className="modal-scrim" onClick={onClose}>
+      <div className="cv" onClick={e=>e.stopPropagation()}>
+        <div className="cv-top">
+          <div className="cv-trail">
+            <span className="cv-back" onClick={onClose}>← Back to results</span>
+            <span className="sep">·</span>
+            <b>{contract.title}</b>
+            <span className="sep">›</span>
+            <span>{clause.article}</span>
+            <span className="sep">›</span>
+            <b>{clause.section} {clause.title}</b>
+          </div>
+          <div className="cv-actions">
+            <button className="bar-btn" onClick={copyText}>Copy clause</button>
+            <button className={"bar-btn" + (isPinned?" active":"")} onClick={()=>onPin(clause.id)}>{isPinned ? "📌 Pinned" : "📌 Pin"}</button>
+            <button className="bar-btn" onClick={onClose}>Close <span className="kbd">esc</span></button>
+          </div>
+        </div>
+        <div className="cv-body">
+          <aside className="cv-meta">
+            <div className="mk">Contract</div>
+            <div className="mv">{contract.title}</div>
+            <div className="mk">Counterparty</div>
+            <div className="mv">{contract.counterparty}</div>
+            <div className="mk">Signed</div>
+            <div className="mv">{contract.signed}</div>
+            <div className="mk">Governing law</div>
+            <div className="mv">{contract.law}</div>
+            <div className="mk">Pages</div>
+            <div className="mv">{contract.pages}</div>
+            <div className="mk">Clause id</div>
+            <div className="mv mono">{clause.id} · {clause.section}</div>
+            <div className="mk">Family</div>
+            <div className="mv mono">{clause.family}</div>
+
+            <div className="mk" style={{marginTop:18}}>Other clauses in this contract</div>
+            <div className="cv-sibs">
+              {sibs.map((s,i) => (
+                <a className={"sib" + (s.id===clauseId?" cur":"")} key={s.id} href={"#"+s.id}
+                   onClick={e=>{e.preventDefault(); document.getElementById("cv-sec-"+s.id)?.scrollIntoView({block:"center", behavior:"smooth"});}}>
+                  <span className="sn">{s.section}</span>
+                  <span className="st">{s.title}</span>
+                </a>
+              ))}
+            </div>
+          </aside>
+          <div className="cv-doc">
+            <div className="doc-head-fake">
+              <div className="dh-eyebrow">Master Services Agreement</div>
+              <div className="dh-title">{contract.title}</div>
+              <div className="dh-sub">Vendor Co. ↔ {contract.counterparty} · Executed {contract.signed} · Governed by {contract.law} law</div>
+            </div>
+            {sibs.map((s,i) => (
+              <section className={"doc-sec" + (s.id===clauseId?" focal":"")} key={s.id} id={"cv-sec-"+s.id}>
+                <div className="ds-head">
+                  <span className="ds-num">{s.section}</span>
+                  <span className="ds-title">{s.title}</span>
+                  {s.id===clauseId && <span className="ds-tag">matched</span>}
+                </div>
+                <div className="ds-body">{s.text}</div>
+              </section>
+            ))}
+            <section className="doc-sec faded">
+              <div className="ds-head"><span className="ds-num">§ — </span><span className="ds-title">Additional sections not extracted</span></div>
+              <div className="ds-body" style={{color:"var(--ink-4)"}}>This is a prototype; only extracted clauses are shown. In production, the full contract text would render here with the matched clause highlighted in context.</div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExportModal({ pinnedIds, onClose }){
+  const pinned = pinnedIds.map(id => window.CLAUSES.find(c => c.id===id)).filter(Boolean);
+  const [tmpl, setTmpl] = useState_v("Blank MSA");
+  const [cite, setCite] = useState_v("Word comments");
+
+  useEffect_v(() => {
+    function onKey(e){ if (e.key==="Escape") onClose(); }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const grouped = {};
+  pinned.forEach(c => { (grouped[c.family] = grouped[c.family]||[]).push(c); });
+
+  function doDownload(){
+    // Build a fake .docx-ish text file as a stand-in
+    const lines = [];
+    lines.push("MASTER SERVICES AGREEMENT");
+    lines.push("DRAFT — assembled by ClauseIQ — " + new Date().toISOString().slice(0,10));
+    lines.push("");
+    Object.entries(grouped).forEach(([fam, list], i) => {
+      lines.push(`${i+1}. ${window.familyLabel(fam).toUpperCase()}`);
+      list.forEach((c,j) => {
+        lines.push(`  ${i+1}.${j+1} ${c.title}`);
+        lines.push(`    ${c.text}`);
+        lines.push(`    [comment: cited from ${window.CONTRACTS.find(x=>x.id===c.contract).title} ${c.section}]`);
+        lines.push("");
+      });
+    });
+    const blob = new Blob([lines.join("\n")], { type:"text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "ClauseIQ-draft.txt";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    onClose();
+  }
+
+  return (
+    <div className="modal-scrim" onClick={onClose}>
+      <div className="export" onClick={e=>e.stopPropagation()}>
+        <div className="cv-top">
+          <div className="cv-trail">
+            <b>Export draft</b>
+            <span className="sep">·</span>
+            <span>{pinned.length} clauses · {new Set(pinned.map(p=>p.contract)).size} contracts</span>
+          </div>
+          <div className="cv-actions">
+            <button className="bar-btn" onClick={onClose}>Cancel</button>
+            <button className="bar-btn primary" onClick={doDownload} disabled={!pinned.length}>Download draft ↓</button>
+          </div>
+        </div>
+        <div className="export-body">
+          <div className="ex-left">
+            <div className="ex-eyebrow">Section order · {pinned.length} pinned clauses, grouped by family</div>
+            {!pinned.length && <div style={{color:"var(--ink-3)",padding:"24px 4px",fontSize:13}}>Nothing pinned yet. Press <span className="kbd">p</span> on a result to pin it.</div>}
+            {Object.entries(grouped).map(([fam, list], i) => (
+              <div key={fam} className="ex-grp">
+                <div className="ex-grp-head">§ {i+1} · {window.familyLabel(fam)} <span className="ex-count">{list.length}</span></div>
+                {list.map((c,j) => (
+                  <div className="ex-tile" key={c.id}>
+                    <div className="ex-th">
+                      <span className="ex-tt">{i+1}.{j+1} · {c.title}</span>
+                      <span className="ex-tm">⋮⋮ {window.CONTRACTS.find(x=>x.id===c.contract).title.split(" ")[0]} {c.section}</span>
+                    </div>
+                    <div className="ex-tx">{c.text}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className="ex-right">
+            <div className="ex-controls">
+              <span className="pill ink" onClick={()=>setTmpl(tmpl==="Blank MSA"?"Firm template":"Blank MSA")} style={{cursor:"pointer"}}>Template · {tmpl}</span>
+              <span className="pill" onClick={()=>setCite(cite==="Word comments"?"Footnotes":"Word comments")} style={{cursor:"pointer"}}>Citations · {cite}</span>
+              <span className="pill">Numbering · auto</span>
+            </div>
+            <div className="ex-preview">
+              <div className="ep-title">MASTER SERVICES AGREEMENT</div>
+              <div className="ep-sub">DRAFT · assembled by ClauseIQ · {new Date().toISOString().slice(0,10)}</div>
+              {Object.entries(grouped).slice(0,3).map(([fam, list], i) => (
+                <div key={fam} className="ep-sec">
+                  <div className="ep-h">{i+1}. {window.familyLabel(fam).toUpperCase()}.</div>
+                  {list.slice(0,2).map((c,j) => (
+                    <div key={c.id}>
+                      <div className="ep-p"><b>{i+1}.{j+1} {c.title}.</b> {c.text}</div>
+                      {cite==="Word comments" && <div className="ep-cite">▸ Word comment: cited from {window.CONTRACTS.find(x=>x.id===c.contract).title} {c.section}</div>}
+                      {cite==="Footnotes" && <div className="ep-cite">[{i+1}.{j+1}] {window.CONTRACTS.find(x=>x.id===c.contract).title} {c.section}</div>}
+                    </div>
+                  ))}
+                </div>
+              ))}
+              {!pinned.length && <div style={{color:"var(--ink-4)",padding:"40px 0",textAlign:"center",fontSize:13}}>No pinned clauses to preview.</div>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.ContractViewer = ContractViewer;
+window.ExportModal = ExportModal;
+
+</script>
+<script type="text/babel" data-presets="react">
+// === proto/app.jsx ===
+// Main app — Workbench shell + state machine.
+const { useState: uS, useEffect: uE, useMemo: uM, useRef: uR, useCallback: uC } = React;
+
+const LS_KEY = "clauseiq_proto_v1";
+function loadState(){
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch { return {}; }
+}
+function saveState(s){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch {}
+}
+
+function App(){
+  const initial = loadState();
+  const [query, setQuery]       = uS(initial.query || "");
+  const [submitted, setSub]     = uS(initial.query || "");
+  const [filters, setFilters]   = uS(initial.filters || { family:[], law:[], counterparty:[] });
+  const [pinned, setPinned]     = uS(initial.pinned || []);
+  const [recent, setRecent]     = uS(initial.recent || []);
+  const [palOpen, setPal]       = uS(false);
+  const [exportOpen, setExport] = uS(false);
+  const [viewerId, setViewer]   = uS(null);
+  const [pasteMode, setPaste]   = uS(false);
+  const [pasteText, setPasteTx] = uS("");
+  const [selIdx, setSelIdx]     = uS(0);
+  const [loading, setLoading]   = uS(false);
+  const [dockOpen, setDock]     = uS(initial.dockOpen ?? true);
+
+  // persist
+  uE(() => { saveState({ query: submitted, filters, pinned, recent, dockOpen }); }, [submitted, filters, pinned, recent, dockOpen]);
+
+  // search
+  const results = uM(() => window.search(submitted, filters), [submitted, filters]);
+  const qTokens = uM(() => window.expandedTokens(submitted), [submitted]);
+
+  uE(() => { setSelIdx(0); }, [submitted, filters]);
+
+  const current = results[selIdx];
+
+  // keyboard shortcuts
+  uE(() => {
+    function onKey(e){
+      const t = e.target;
+      const inField = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+      // Open palette
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault(); setPal(true); return;
+      }
+      if (e.key === "/" && !inField && !palOpen && !exportOpen && !viewerId) {
+        e.preventDefault(); setPal(true); return;
+      }
+      if (e.key === "Escape") {
+        if (palOpen) { setPal(false); return; }
+      }
+      if (palOpen || exportOpen || viewerId) return;
+      if (inField) return;
+      // Navigation + actions
+      if (e.key === "j" || e.key === "ArrowDown") {
+        if (results.length) { e.preventDefault(); setSelIdx(i => Math.min(results.length-1, i+1)); }
+      } else if (e.key === "k" || e.key === "ArrowUp") {
+        if (results.length) { e.preventDefault(); setSelIdx(i => Math.max(0, i-1)); }
+      } else if (e.key === "p") {
+        if (current) { e.preventDefault(); togglePin(current.clause.id); }
+      } else if (e.key === "c") {
+        if (current) { e.preventDefault(); navigator.clipboard?.writeText(current.clause.text); flash("Copied clause"); }
+      } else if (e.key === "o") {
+        if (current) { e.preventDefault(); setViewer(current.clause.id); }
+      } else if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault(); setExport(true);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  // toast
+  const [toast, setToast] = uS(null);
+  function flash(msg){ setToast(msg); clearTimeout(flash._t); flash._t = setTimeout(()=>setToast(null), 1400); }
+
+  function togglePin(id){
+    setPinned(p => p.includes(id) ? p.filter(x=>x!==id) : [...p, id]);
+    flash(pinned.includes(id) ? "Unpinned" : "Pinned to scratchpad");
+  }
+  const isPinned = (id) => pinned.includes(id);
+
+  function runQuery(q, extraFilters){
+    setLoading(true);
+    setTimeout(() => setLoading(false), 280);
+    setQuery(q);
+    setSub(q);
+    setPaste(false);
+    if (extraFilters) {
+      setFilters(f => ({...f, ...extraFilters}));
+    }
+    if (q.trim()) {
+      setRecent(r => [q.trim(), ...r.filter(x => x !== q.trim())].slice(0, 8));
+    }
+  }
+  function pasteMatch(text){
+    setPaste(true); setPasteTx(text);
+    setQuery(text); setSub(text);
+    // auto-infer family roughly
+    const lower = text.toLowerCase();
+    let fam = null;
+    if (/confidential|nda|trade secret/.test(lower)) fam = "confidentiality";
+    else if (/liability|cap|aggregate/.test(lower)) fam = "limitation_of_liability";
+    else if (/terminat|breach|cure/.test(lower)) fam = "termination";
+    else if (/indemn/.test(lower)) fam = "indemnification";
+    if (fam) setFilters(f => ({...f, family:[fam]}));
+  }
+  function clearFilter(kind, val){
+    setFilters(f => ({...f, [kind]: f[kind].filter(x => x!==val)}));
+  }
+  function toggleFilter(kind, val){
+    setFilters(f => ({...f, [kind]: f[kind].includes(val) ? f[kind].filter(x=>x!==val) : [...f[kind], val]}));
+  }
+
+  const famCounts = uM(() => window.familyCounts(), []);
+  const lawCountsM = uM(() => window.lawCounts(), []);
+  const cpCounts = uM(() => window.counterpartyCounts(), []);
+
+  const hasQueryOrFilter = submitted.trim() || filters.family.length || filters.law.length || filters.counterparty.length;
+  const filterCount = filters.family.length + filters.law.length + filters.counterparty.length;
+
+  return (
+    <div className="app">
+      <Topbar
+        query={submitted}
+        onOpenPal={() => setPal(true)}
+        pinnedCount={pinned.length}
+        onOpenExport={() => setExport(true)}
+        pasteMode={pasteMode}
+        contractCount={window.CONTRACTS.length}
+        clauseCount={window.CLAUSES.length}
+      />
+
+      <div className="main">
+        <FilterRail
+          filters={filters}
+          famCounts={famCounts}
+          lawCounts={lawCountsM}
+          cpCounts={cpCounts}
+          onToggle={toggleFilter}
+          onClear={(k)=>setFilters(f=>({...f,[k]:[]}))}
+        />
+
+        <ResultsPanel
+          query={submitted}
+          loading={loading}
+          results={results}
+          selIdx={selIdx}
+          onSelect={setSelIdx}
+          onPin={togglePin}
+          onOpen={(id)=>setViewer(id)}
+          isPinned={isPinned}
+          qTokens={qTokens}
+          hasQueryOrFilter={hasQueryOrFilter}
+          filters={filters}
+          onClearFilter={clearFilter}
+          pasteMode={pasteMode}
+          pasteText={pasteText}
+          onExitPaste={()=>{setPaste(false);setPasteTx("");}}
+        />
+
+        <PreviewPane
+          item={current}
+          qTokens={qTokens}
+          onPin={togglePin}
+          isPinned={current ? isPinned(current.clause.id) : false}
+          onOpen={(id)=>setViewer(id)}
+        />
+      </div>
+
+      <Dock
+        open={dockOpen}
+        onToggle={()=>setDock(d=>!d)}
+        pinned={pinned}
+        onUnpin={togglePin}
+        onOpenExport={()=>setExport(true)}
+        onView={(id)=>setViewer(id)}
+      />
+
+      <CommandPalette
+        open={palOpen}
+        onClose={()=>setPal(false)}
+        onRunQuery={runQuery}
+        onPasteMatch={pasteMatch}
+        recentQueries={recent}
+        currentQuery={query}
+      />
+      {viewerId && <ContractViewer clauseId={viewerId} onClose={()=>setViewer(null)} onPin={togglePin} isPinned={isPinned(viewerId)} />}
+      {exportOpen && <ExportModal pinnedIds={pinned} onClose={()=>setExport(false)} />}
+
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  );
+}
+
+function Topbar({ query, onOpenPal, pinnedCount, onOpenExport, pasteMode, contractCount, clauseCount }){
+  return (
+    <div className="topbar">
+      <div className="brand">Clause<span className="dot">IQ</span></div>
+      <div className="searchbar" onClick={onOpenPal} title="Open command palette (⌘K)">
+        <span className="chev">{pasteMode ? "¶" : ">"}</span>
+        {query
+          ? <span className="qtxt">{query}</span>
+          : <span className="ph">{pasteMode ? "Paste-and-match active" : "Describe a clause, or paste draft language…"}</span>}
+        <span className="sp"></span>
+        <span className="kbd">⌘K</span>
+      </div>
+      <span className="pill">{clauseCount} clauses · {contractCount} contracts</span>
+      <button className="bar-btn" onClick={onOpenExport} disabled={!pinnedCount}>
+        {pinnedCount ? `${pinnedCount} pinned` : "0 pinned"}
+      </button>
+    </div>
+  );
+}
+
+function FilterRail({ filters, famCounts, lawCounts, cpCounts, onToggle, onClear }){
+  const [expandedFams, setExp] = uS(false);
+  const fams = expandedFams ? window.FAMILIES : window.FAMILIES.slice(0,7);
+  return (
+    <aside className="rail">
+      <div className="grp">
+        <h4>Clause family {filters.family.length>0 && <span className="clear" onClick={()=>onClear("family")}>clear</span>}</h4>
+        {fams.map(([k,l]) => (
+          <div key={k} className={"opt" + (filters.family.includes(k)?" sel":"")} onClick={()=>onToggle("family",k)}>
+            <span>{l}</span><span className="count">{famCounts[k]||0}</span>
+          </div>
+        ))}
+        {!expandedFams && <div className="opt" onClick={()=>setExp(true)}><span className="more">Show all {window.FAMILIES.length} →</span></div>}
+      </div>
+      <div className="grp">
+        <h4>Governing law {filters.law.length>0 && <span className="clear" onClick={()=>onClear("law")}>clear</span>}</h4>
+        {Object.entries(lawCounts).map(([l,n]) => (
+          <div key={l} className={"opt" + (filters.law.includes(l)?" sel":"")} onClick={()=>onToggle("law",l)}>
+            <span>{l}</span><span className="count">{n}</span>
+          </div>
+        ))}
+      </div>
+      <div className="grp">
+        <h4>Counterparty {filters.counterparty.length>0 && <span className="clear" onClick={()=>onClear("counterparty")}>clear</span>}</h4>
+        {Object.entries(cpCounts).slice(0,6).map(([cp,n]) => (
+          <div key={cp} className={"opt" + (filters.counterparty.includes(cp)?" sel":"")} onClick={()=>onToggle("counterparty",cp)}>
+            <span>{cp}</span><span className="count">{n}</span>
+          </div>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function ResultsPanel({ query, loading, results, selIdx, onSelect, onPin, onOpen, isPinned, qTokens, hasQueryOrFilter, filters, onClearFilter, pasteMode, pasteText, onExitPaste }){
+  if (!hasQueryOrFilter) return <EmptyHome />;
+  if (loading) return <LoadingSkeleton />;
+  return (
+    <section className="results">
+      {pasteMode && (
+        <div className="paste-banner">
+          <div className="pb-eyebrow">Pasted draft · click "exit" to switch back to query mode</div>
+          <div className="pb-text">"{pasteText}"</div>
+          <div className="pb-foot"><button className="bar-btn" onClick={onExitPaste}>Exit paste mode</button></div>
+        </div>
+      )}
+      {(filters.family.length>0 || filters.law.length>0 || filters.counterparty.length>0) && (
+        <div className="filter-chips">
+          {filters.family.map(f => <span key={f} className="chip" onClick={()=>onClearFilter("family",f)}>family: {window.familyLabel(f)} <span className="x">×</span></span>)}
+          {filters.law.map(l => <span key={l} className="chip" onClick={()=>onClearFilter("law",l)}>law: {l} <span className="x">×</span></span>)}
+          {filters.counterparty.map(cp => <span key={cp} className="chip" onClick={()=>onClearFilter("counterparty",cp)}>cp: {cp} <span className="x">×</span></span>)}
+        </div>
+      )}
+      <div className="results-head">
+        <b>{results.length}</b> <span>results</span>
+        <span className="sep">·</span><span>BM25 + kNN → RRF → rerank</span>
+        <span className="sep">·</span><span>{(180 + Math.floor(Math.random()*40))} ms</span>
+        <span style={{flex:1}}></span>
+        <span className="pill">Relevance ↓</span>
+      </div>
+      {!results.length && <ZeroResults filters={filters} onClearFilter={onClearFilter} />}
+      <div className="rows">
+        {results.map((r, i) => (
+          <ResultRow key={r.clause.id} idx={i+1} item={r} qTokens={qTokens} selected={i===selIdx}
+            onClick={()=>onSelect(i)} onPin={()=>onPin(r.clause.id)} onOpen={()=>onOpen(r.clause.id)} pinned={isPinned(r.clause.id)} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ResultRow({ idx, item, qTokens, selected, onClick, onPin, onOpen, pinned }){
+  const parts = window.highlight(item.clause.text, qTokens);
+  return (
+    <div className={"row" + (selected?" sel":"")} onClick={onClick} onDoubleClick={onOpen}>
+      <div className="idx">{String(idx).padStart(2,"0")}</div>
+      <div className="body">
+        <div className="head">
+          <span className="title">{item.clause.title}</span>
+          <span className="pill fam">{item.clause.family}</span>
+        </div>
+        <div className="ctx">{item.contract.title} · <b>{item.contract.counterparty}</b> · {item.clause.section} · signed {item.contract.signed} · {item.contract.law}</div>
+        <div className="clause">
+          {parts.map((p,i) => p.hit ? <mark key={i}>{p.text}</mark> : <span key={i}>{p.text}</span>)}
+        </div>
+        <div className="meta">
+          <span>score <b>{item.score.toFixed(2)}</b></span>
+          {item.matched.length > 0 && <><span className="sep">·</span><span>matched: {item.matched.slice(0,4).join(" · ")}</span></>}
+        </div>
+      </div>
+      <div className="act">
+        <button className={pinned?"pinned":""} onClick={e=>{e.stopPropagation(); onPin();}} title="Pin (p)">📌</button>
+        <button onClick={e=>{e.stopPropagation(); onOpen();}} title="Open contract (o)">↗</button>
+      </div>
+    </div>
+  );
+}
+
+function PreviewPane({ item, qTokens, onPin, isPinned, onOpen }){
+  if (!item) {
+    return (
+      <section className="preview">
+        <div className="preview-head"><span className="trail">— select a result —</span></div>
+        <div className="zero"><div className="ic">¶</div><h3>Preview appears here</h3><p>Selected clause will show in its contract context.</p></div>
+      </section>
+    );
+  }
+  const c = item.clause, ct = item.contract;
+  const parts = window.highlight(c.text, qTokens);
+  return (
+    <section className="preview">
+      <div className="preview-head">
+        <span className="trail">{ct.title} › {c.article} › <b>{c.section} {c.title}</b></span>
+        <button className={"bar-btn" + (isPinned?" active":"")} onClick={()=>onPin(c.id)}>{isPinned?"📌 Pinned":"📌 Pin"}</button>
+        <button className="bar-btn" onClick={()=>{navigator.clipboard?.writeText(c.text);}}>Copy</button>
+        <button className="bar-btn" onClick={()=>onOpen(c.id)}>Open ↗</button>
+      </div>
+      <div className="preview-body">
+        <div className="doc-top">Master Services Agreement · Vendor Co. ↔ {ct.counterparty}</div>
+        <h2>{c.article}</h2>
+        <div className="focal">
+          <div className="tag">{c.section} · {c.title} — matched</div>
+          <div className="txt">{parts.map((p,i) => p.hit ? <mark key={i}>{p.text}</mark> : <span key={i}>{p.text}</span>)}</div>
+        </div>
+        <div className="ctx-line" style={{marginTop:18}}><b>Surrounding sections.</b> Other articles in {ct.title} include warranties, indemnification, term &amp; renewal, and general provisions. Click <span className="kbd">o</span> or "Open ↗" to read the full contract.</div>
+      </div>
+      <div className="preview-foot">
+        <span>clause · <b>{c.id}</b></span>
+        <span className="sep">·</span><span>confidence <b>high</b></span>
+        <span className="sep">·</span><span>pages <b>{c.pages}</b></span>
+        <span style={{flex:1}}></span>
+        <span>use <span className="kbd">j</span>/<span className="kbd">k</span> to step</span>
+      </div>
+    </section>
+  );
+}
+
+function Dock({ open, onToggle, pinned, onUnpin, onOpenExport, onView }){
+  if (!open) {
+    return (
+      <div className="dock collapsed">
+        <div className="dock-head">
+          <span className="lbl">Scratchpad</span>
+          <span className="pill">{pinned.length} clauses</span>
+          <span style={{flex:1}}></span>
+          <button className="bar-btn" onClick={onToggle}>Expand ↑</button>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="dock">
+      <div className="dock-head">
+        <span className="lbl">Scratchpad</span>
+        <span className="pill">{pinned.length} {pinned.length===1?"clause":"clauses"} · {new Set(pinned.map(id=>window.CLAUSES.find(c=>c.id===id)?.contract).filter(Boolean)).size} contracts</span>
+        <span style={{flex:1}}></span>
+        <button className="bar-btn" disabled>Group by family</button>
+        <button className="bar-btn primary" onClick={onOpenExport} disabled={!pinned.length}>Export draft <span className="kbd" style={{background:"transparent",border:"none",color:"rgba(255,255,255,.6)",marginLeft:4}}>⌘↵</span></button>
+        <button className="bar-btn" onClick={onToggle}>Collapse ↓</button>
+      </div>
+      {!pinned.length ? (
+        <div className="dock-empty">
+          Press <span className="kbd">p</span> on a result to start collecting clauses for your draft.
+        </div>
+      ) : (
+        <div className="dock-tiles">
+          {pinned.map((id, i) => {
+            const c = window.CLAUSES.find(x=>x.id===id);
+            if (!c) return null;
+            const ct = window.CONTRACTS.find(x=>x.id===c.contract);
+            return (
+              <div className="tile" key={id} onClick={()=>onView(id)}>
+                <div className="th">
+                  <span className="tt">{i+1} · {c.title}</span>
+                  <span className="x" onClick={e=>{e.stopPropagation(); onUnpin(id);}}>×</span>
+                </div>
+                <div className="tm">{ct?.title.split(" ")[0]} {c.section}</div>
+                <div className="tx">{c.text}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EmptyHome(){
+  return (
+    <section className="results">
+      <div className="empty-home">
+        <div className="eh-title">Find a clause from your precedents.</div>
+        <div className="eh-sub">Describe a clause in plain English, paste draft language, or pick a family to browse.</div>
+        <div className="eh-tries">
+          <span className="pill">cap on liability tied to 12 months of fees</span>
+          <span className="pill">30-day cure period for breach</span>
+          <span className="pill">auto-renewal with opt-out notice</span>
+        </div>
+        <div className="eh-kbd">
+          <div className="ehk-head">Keyboard · always on</div>
+          <div className="ehk-rows">
+            <div><span className="kbd">/</span> open palette</div>
+            <div><span className="kbd">⌘K</span> open palette</div>
+            <div><span className="kbd">j</span> <span className="kbd">k</span> next / prev result</div>
+            <div><span className="kbd">p</span> pin · <span className="kbd">c</span> copy · <span className="kbd">o</span> open</div>
+            <div><span className="kbd">⌘↵</span> export draft</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LoadingSkeleton(){
+  return (
+    <section className="results">
+      <div className="results-head"><span>Searching…</span><span className="sep">·</span><span>BM25 + kNN running</span></div>
+      {[0,1,2,3].map(i => (
+        <div className="row" key={i}>
+          <div className="idx">—</div>
+          <div className="body">
+            <div className="shim" style={{width:"60%",margin:"4px 0 8px"}} />
+            <div className="shim" style={{width:"40%",margin:"0 0 10px"}} />
+            <div className="shim" style={{width:"95%",margin:"0 0 4px"}} />
+            <div className="shim" style={{width:"88%",margin:"0 0 4px"}} />
+            <div className="shim" style={{width:"70%"}} />
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function ZeroResults({ filters, onClearFilter }){
+  return (
+    <div style={{padding:"28px 18px"}}>
+      <h3 style={{fontFamily:"var(--display)",fontWeight:600,fontSize:17,color:"var(--ink)",margin:"0 0 8px",letterSpacing:"-.01em"}}>No matching clauses.</h3>
+      <p style={{color:"var(--ink-3)",fontSize:13,lineHeight:1.55,margin:"0 0 16px",maxWidth:340}}>Try broadening:</p>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {filters.law.map(l => <button key={l} className="bar-btn" style={{justifyContent:"flex-start"}} onClick={()=>onClearFilter("law",l)}><span style={{color:"var(--accent)",fontFamily:"var(--mono)"}}>×</span> Remove filter: <b style={{color:"var(--ink)",marginLeft:6}}>law = {l}</b></button>)}
+        {filters.family.map(f => <button key={f} className="bar-btn" style={{justifyContent:"flex-start"}} onClick={()=>onClearFilter("family",f)}><span style={{color:"var(--accent)",fontFamily:"var(--mono)"}}>×</span> Remove filter: <b style={{color:"var(--ink)",marginLeft:6}}>family = {window.familyLabel(f)}</b></button>)}
+        {filters.counterparty.map(cp => <button key={cp} className="bar-btn" style={{justifyContent:"flex-start"}} onClick={()=>onClearFilter("counterparty",cp)}><span style={{color:"var(--accent)",fontFamily:"var(--mono)"}}>×</span> Remove filter: <b style={{color:"var(--ink)",marginLeft:6}}>counterparty = {cp}</b></button>)}
+      </div>
+      <p style={{color:"var(--ink-4)",fontSize:11.5,fontFamily:"var(--mono)",margin:"18px 0 0",lineHeight:1.5}}>Tip: try broader phrasing — e.g. "long notice period" instead of "180 days".</p>
+    </div>
+  );
+}
+
+window.App = App;
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+</script>
+</body>
+</html>
