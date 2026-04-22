@@ -1,0 +1,356 @@
+<!-- ================== DIRECTION B — COMMAND BAR DRIVEN ================== -->
+<section class="section" id="dirB">
+  <div class="section-head">
+    <div class="section-num">05</div>
+    <h2 class="section-title">Direction B &nbsp;— Command bar</h2>
+  </div>
+  <p class="section-sub">Search is the hero. Filters live as chips, not a rail. Scratchpad is a right drawer. Keyboard first, mouse optional. Closest to Linear / Raycast.</p>
+
+  <div class="dir-badge"><span class="letter">B</span> Command bar · keyboard-first, chip filters, right drawer</div>
+
+  <!-- ===== B.1 Empty state / command palette ===== -->
+  <div class="annot-row">
+    <div>
+      <div class="wf">
+        <div class="wf-label">B.1 &nbsp;· Command palette at rest</div>
+        <div class="app" style="min-height: 520px; position: relative; background: var(--bg);">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <div style="flex:1"></div>
+            <span class="pill ink">1,284 clauses indexed</span>
+            <span class="kbd">/</span>
+          </div>
+          <div style="padding: 80px 24px; display:flex; justify-content: center;">
+            <div style="width: 720px; max-width: 100%;">
+              <div style="font-family: var(--display); font-size: 28px; font-weight: 500; letter-spacing:-0.01em; text-align:center; margin-bottom:8px;">What clause are you looking for?</div>
+              <div style="text-align:center; color: var(--ink-3); font-size: 13px; margin-bottom: 32px;">Type, paste, or press <span class="kbd app">⌘K</span> for shortcuts.</div>
+
+              <div style="background: var(--panel); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 4px 4px 0 var(--ink); overflow: hidden;">
+                <div style="padding: 14px 18px; display:flex; align-items:center; gap: 10px; border-bottom: 1px solid var(--line);">
+                  <span style="font-family: var(--mono); color: var(--accent); font-weight: 600;">&gt;</span>
+                  <div style="flex:1; font-family: var(--mono); font-size: 14px; color: var(--ink-4);">cap on liability tied to fees paid in 12 months, carve-out for IP indemnity|</div>
+                  <span class="kbd app">↵</span>
+                </div>
+                <div style="padding: 6px 0;">
+                  <div style="padding: 8px 18px; color: var(--ink-3); font-size: 11px; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase;">Quick actions</div>
+                  <div style="padding: 8px 18px; display:flex; gap: 10px; align-items:center; font-size: 13px;">
+                    <span style="font-family: var(--mono); color: var(--accent);">⌕</span>
+                    <span>Search clauses</span>
+                    <span style="flex:1"></span>
+                    <span class="kbd app">↵</span>
+                  </div>
+                  <div style="padding: 8px 18px; display:flex; gap: 10px; align-items:center; font-size: 13px; color: var(--ink-2);">
+                    <span style="font-family: var(--mono); color: var(--ink-3);">¶</span>
+                    <span>Paste draft clause to find similar…</span>
+                    <span style="flex:1"></span>
+                    <span class="kbd app">⇧ ↵</span>
+                  </div>
+                  <div style="padding: 8px 18px; display:flex; gap: 10px; align-items:center; font-size: 13px; color: var(--ink-2);">
+                    <span style="font-family: var(--mono); color: var(--ink-3);">⌂</span>
+                    <span>Browse clause families…</span>
+                    <span style="flex:1"></span>
+                    <span class="kbd app">⌘ B</span>
+                  </div>
+                  <div style="padding: 8px 18px; border-top: 1px solid var(--line-2); color: var(--ink-3); font-size: 11px; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px;">Recent</div>
+                  <div style="padding: 6px 18px; font-size: 13px; color: var(--ink-2);">30-day cure period for material breach</div>
+                  <div style="padding: 6px 18px; font-size: 13px; color: var(--ink-2);">NY governing law &amp; jurisdiction</div>
+                  <div style="padding: 6px 18px 12px; font-size: 13px; color: var(--ink-2);">auto‑renewal with opt‑out notice</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 16px; text-align:center; font-family: var(--mono); font-size: 11px; color: var(--ink-3);">
+                <span class="kbd app">↑</span> <span class="kbd app">↓</span> navigate &nbsp;·&nbsp;
+                <span class="kbd app">⇥</span> filter &nbsp;·&nbsp;
+                <span class="kbd app">esc</span> close
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Command palette · loads focused. User never needs to click to start typing.</div>
+    </div>
+    <div class="annot">
+      <p><span class="pin">B.1</span></p>
+      <p>The palette <b>is the product</b> at t=0. No sidebar, no navigation. One input, one action.</p>
+      <p class="sketch-arrow">→</p>
+      <p><b>Tab</b> inside the palette adds filters as chips inline (<i>law:NY family:termination</i>). Power users never leave the keyboard.</p>
+    </div>
+  </div>
+
+  <!-- ===== B.2 Results with chips ===== -->
+  <div class="annot-row reverse">
+    <div class="annot">
+      <p><span class="pin">B.2</span></p>
+      <p>Filters = <b>chips above results</b>. Easy to drop (<i>×</i>), easy to pivot. No permanent sidebar real-estate cost.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Scratchpad is a <b>right drawer</b> — collapses to a 44px rail showing pin count. Full drawer opens on click or <b>⇧ P</b>.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Each row shows <b>keyboard affordances</b> next to actions (P pin, C copy, O open). Teaches shortcuts by osmosis.</p>
+    </div>
+    <div>
+      <div class="wf">
+        <div class="wf-label">B.2 &nbsp;· Results · chips + right drawer</div>
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <div style="flex:1; display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px;">
+              <span style="color: var(--accent); font-family: var(--mono); font-weight: 600;">&gt;</span>
+              <span style="font-family: var(--mono); font-size: 12px;">cap on liability tied to fees paid in 12 months</span>
+            </div>
+            <span class="pill ink">2 pinned</span>
+            <span class="kbd">⇧ P</span>
+          </div>
+
+          <!-- chips row -->
+          <div style="display: flex; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--line); align-items: center; background: var(--bg);">
+            <span class="pill" style="background:var(--ink); color:#fff; border-color:var(--ink);">family: limitation_of_liability ×</span>
+            <span class="pill" style="background:var(--ink); color:#fff; border-color:var(--ink);">law: NY ×</span>
+            <span class="pill">+ add filter</span>
+            <div style="flex:1"></div>
+            <span class="pill">Sort: relevance</span>
+            <span class="pill">Show debug</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 44px; min-height: 560px;">
+            <!-- results -->
+            <div>
+              <div style="padding: 8px 16px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); border-bottom: 1px solid var(--line-2);">
+                <b style="color:var(--ink)">14</b> results · BM25 50 + kNN 50 → RRF → rerank → 14 · <b>182 ms</b>
+              </div>
+
+              <div class="row sel">
+                <div class="idx">01</div>
+                <div class="body">
+                  <div class="head">
+                    <span class="title">Cap — 12 Months of Fees</span>
+                    <span class="pill fam">limitation_of_liability</span>
+                    <span class="pill good">executed</span>
+                  </div>
+                  <div class="ctx">Initech MSA · <b>Initech LLC</b> · §8.2 · N.Y. law</div>
+                  <div class="clause">Except for breaches of confidentiality or indemnification obligations, each party's <mark>total aggregate liability</mark> arising out of or relating to this Agreement shall not exceed the <mark>fees paid by Customer in the twelve (12) months</mark> preceding the event giving rise to the claim.</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.96</b></span><span>·</span><span>matched: aggregate liability, 12 months, fees paid</span></div>
+                </div>
+                <div class="act">
+                  <button><span class="kbd app">P</span> pin</button>
+                  <button><span class="kbd app">C</span> copy</button>
+                  <button><span class="kbd app">O</span> open</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="idx">02</div>
+                <div class="body">
+                  <div class="head"><span class="title">Liability Cap with IP Carve-out</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Acme MSA · §8.3 · N.Y. law</div>
+                  <div class="clause">Notwithstanding the foregoing, the liability cap in Section 8.2 shall <mark>not apply</mark> to (i) a party's <mark>indemnification obligations for third-party intellectual property claims</mark>…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.93</b></span><span>·</span><span>matched: IP, carve-out, indemnification</span></div>
+                </div>
+                <div class="act">
+                  <button class="pinned"><span class="kbd app">P</span> pinned</button>
+                  <button><span class="kbd app">C</span> copy</button>
+                  <button><span class="kbd app">O</span> open</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="idx">03</div>
+                <div class="body">
+                  <div class="head"><span class="title">Mutual Liability Cap</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Globex MSA · §9.1 · N.Y. law</div>
+                  <div class="clause">Each party's aggregate liability under this Agreement shall not exceed the greater of (a) <mark>twelve (12) months of fees</mark> paid or (b) $500,000…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.89</b></span></div>
+                </div>
+                <div class="act"><button><span class="kbd app">P</span> pin</button><button><span class="kbd app">C</span> copy</button><button><span class="kbd app">O</span> open</button></div>
+              </div>
+
+              <div class="row">
+                <div class="idx">04</div>
+                <div class="body">
+                  <div class="head"><span class="title">Exclusion of Indirect Damages</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Pied Piper MSA · §7.4 · N.Y. law</div>
+                  <div class="clause">In no event shall either party be liable for any <mark>indirect, incidental, special, consequential, or punitive damages</mark>, including loss of profits, data, or goodwill…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.84</b></span></div>
+                </div>
+                <div class="act"><button><span class="kbd app">P</span> pin</button><button><span class="kbd app">C</span> copy</button><button><span class="kbd app">O</span> open</button></div>
+              </div>
+
+              <div class="row">
+                <div class="idx">05</div>
+                <div class="body">
+                  <div class="head"><span class="title">Super-Cap for Gross Negligence</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Sterling Cooper MSA · §8.4 · N.Y. law</div>
+                  <div class="clause">The liability cap in this Section shall be <mark>increased to three (3) times the fees paid</mark> in the prior twelve months for claims arising out of gross negligence or willful misconduct.</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.79</b></span></div>
+                </div>
+                <div class="act"><button><span class="kbd app">P</span> pin</button><button><span class="kbd app">C</span> copy</button><button><span class="kbd app">O</span> open</button></div>
+              </div>
+
+              <div class="row">
+                <div class="idx">06</div>
+                <div class="body">
+                  <div class="head"><span class="title">Uncapped Breaches</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Hooli MSA · §8.5 · N.Y. law</div>
+                  <div class="clause">Nothing in this Agreement shall limit a party's liability for (a) fraud or fraudulent misrepresentation; (b) death or personal injury caused by negligence; (c) breaches of Section 11 (Confidentiality)…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.72</b></span></div>
+                </div>
+                <div class="act"><button><span class="kbd app">P</span> pin</button><button><span class="kbd app">C</span> copy</button><button><span class="kbd app">O</span> open</button></div>
+              </div>
+            </div>
+
+            <!-- drawer collapsed rail -->
+            <div style="border-left: 1px solid var(--line); background: var(--bg); display:flex; flex-direction: column; align-items: center; padding-top: 14px; gap: 8px;">
+              <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3);">Scratchpad · 2</div>
+              <div style="margin-top: auto; padding: 8px;">
+                <span class="kbd app">⇧P</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Results · chips replace the sidebar. Drawer collapsed to a rail.</div>
+    </div>
+  </div>
+
+  <!-- ===== B.3 Scratchpad drawer open ===== -->
+  <div class="annot-row">
+    <div>
+      <div class="wf">
+        <div class="wf-label">B.3 &nbsp;· Scratchpad drawer open over results</div>
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <div style="flex:1; display:flex; align-items:center; gap:8px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px;">
+              <span style="color: var(--accent); font-family: var(--mono); font-weight: 600;">&gt;</span>
+              <span style="font-family: var(--mono); font-size: 12px;">cap on liability tied to fees paid in 12 months</span>
+            </div>
+            <span class="pill ink">5 pinned</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 420px; min-height: 580px;">
+            <!-- faded results -->
+            <div style="opacity: 0.4; pointer-events: none;">
+              <div style="padding: 8px 16px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); border-bottom: 1px solid var(--line-2);">14 results</div>
+              <div class="row"><div class="idx">01</div><div class="body"><div class="head"><span class="title">Cap — 12 Months of Fees</span></div><div class="ph-line w90"></div><div class="ph-line w70"></div></div></div>
+              <div class="row"><div class="idx">02</div><div class="body"><div class="head"><span class="title">Liability Cap with IP Carve-out</span></div><div class="ph-line w80"></div><div class="ph-line w60"></div></div></div>
+              <div class="row"><div class="idx">03</div><div class="body"><div class="head"><span class="title">Mutual Liability Cap</span></div><div class="ph-line w90"></div><div class="ph-line w60"></div></div></div>
+              <div class="row"><div class="idx">04</div><div class="body"><div class="head"><span class="title">Exclusion of Indirect Damages</span></div><div class="ph-line w80"></div><div class="ph-line w70"></div></div></div>
+            </div>
+            <!-- drawer -->
+            <div style="border-left: 1.5px solid var(--ink); background: var(--panel); display: flex; flex-direction: column;">
+              <div style="padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; gap: 10px;">
+                <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;">Scratchpad</div>
+                <span class="pill">5 clauses</span>
+                <span class="pill">4 contracts</span>
+                <div style="flex:1"></div>
+                <button class="bar-btn">Collapse →</button>
+              </div>
+              <div style="padding: 12px 16px; flex:1; overflow-y: auto;">
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">01 · Termination for Material Breach</span><span class="st-meta">Acme §9.2</span></div>
+                  <div style="color:var(--ink-2); font-size: 12px; line-height: 1.5;">Either party may terminate this Agreement for material breach upon thirty (30) days' written notice…</div>
+                </div>
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">02 · Termination for Convenience</span><span class="st-meta">Globex §11.3</span></div>
+                  <div style="color:var(--ink-2); font-size: 12px; line-height: 1.5;">Customer may terminate this Agreement for convenience upon sixty (60) days' prior written notice…</div>
+                </div>
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">03 · Cap — 12 Months of Fees</span><span class="st-meta">Initech §8.2</span></div>
+                  <div style="color:var(--ink-2); font-size: 12px; line-height: 1.5;">Each party's total aggregate liability shall not exceed the fees paid in the twelve (12) months…</div>
+                </div>
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">04 · Liability Cap with IP Carve-out</span><span class="st-meta">Acme §8.3</span></div>
+                  <div style="color:var(--ink-2); font-size: 12px; line-height: 1.5;">Notwithstanding the foregoing, the liability cap shall not apply to indemnification obligations…</div>
+                </div>
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">05 · Auto-Renewal with Opt-Out</span><span class="st-meta">Hooli §5.1</span></div>
+                  <div style="color:var(--ink-2); font-size: 12px; line-height: 1.5;">This Agreement shall automatically renew for successive one (1) year terms unless either party…</div>
+                </div>
+              </div>
+              <div style="padding: 12px 16px; border-top: 1px solid var(--line); background: var(--bg); display:flex; gap: 8px;">
+                <button class="bar-btn" style="flex:1;">Copy all</button>
+                <button class="bar-btn primary" style="flex:1;">Export draft ↓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Right drawer · reorderable. Doesn't block search. Closes to a thin rail.</div>
+    </div>
+    <div class="annot">
+      <p><span class="pin">B.3</span></p>
+      <p>Drawer animates <b>from right</b>. Fades results behind — still visible as context, but gives scratchpad full focus.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Tiles are reorderable by drag. Reorder = order in final draft export.</p>
+    </div>
+  </div>
+
+  <!-- ===== B.4 Contract viewer (modal-style full screen) ===== -->
+  <div class="annot-row reverse">
+    <div class="annot">
+      <p><span class="pin">B.4</span></p>
+      <p>Contract viewer replaces the results view (still same URL-addressable). <b>Esc</b> returns to results with the scroll position preserved.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Top prev/next arrows step through the <b>result set</b>, not the contract — lets the user compare clauses across contracts without going back.</p>
+    </div>
+    <div>
+      <div class="wf">
+        <div class="wf-label">B.4 &nbsp;· Contract viewer · focused reading</div>
+        <div class="app">
+          <div class="topbar">
+            <button class="bar-btn"><span class="kbd app">esc</span> back</button>
+            <div class="crumbs">Result 2 of 14 · <b>Acme MSA §9.2</b></div>
+            <div style="flex:1"></div>
+            <button class="bar-btn"><span class="kbd app">J</span> next clause</button>
+            <button class="bar-btn"><span class="kbd app">K</span> prev</button>
+            <button class="bar-btn primary"><span class="kbd app">P</span> pin</button>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr; min-height: 560px; background: var(--panel);">
+            <div style="padding: 40px 80px; max-width: 900px; margin: 0 auto;">
+              <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.12em; margin-bottom: 6px;">ACME SAAS MASTER SERVICES AGREEMENT · SIGNED 2023-06-14 · N.Y. LAW</div>
+              <div style="font-family: var(--display); font-size: 24px; font-weight: 600; margin-bottom: 18px;">Article 9 · Termination</div>
+
+              <div style="color: var(--ink-3); font-size: 13.5px; line-height: 1.8; margin-bottom: 14px;">
+                <b style="color:var(--ink-2)">9.1 Term.</b> The initial term of this Agreement shall commence on the Effective Date and continue for a period of thirty-six (36) months, unless earlier terminated in accordance with this Article 9.
+              </div>
+
+              <div style="background: color-mix(in oklab, var(--accent) 10%, white); border-left: 3px solid var(--accent); padding: 18px 22px; margin: 0 -22px; border-radius: 0 4px 4px 0;">
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 8px;">§ 9.2 · TERMINATION FOR MATERIAL BREACH &nbsp;—&nbsp; matched</div>
+                <div style="color: var(--ink); font-size: 14.5px; line-height: 1.8;">
+                  Either party may terminate this Agreement for <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">material breach</mark> by the other party upon <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">thirty (30) days' written notice</mark>, provided that the breaching party shall have such thirty (30) day period to cure the breach to the reasonable satisfaction of the non-breaching party. For avoidance of doubt, failure to pay undisputed fees when due shall constitute a material breach.
+                </div>
+              </div>
+
+              <div style="color: var(--ink-3); font-size: 13.5px; line-height: 1.8; margin-top: 18px;">
+                <b style="color:var(--ink-2)">9.3 Termination for Insolvency.</b> Either party may terminate this Agreement immediately upon written notice if the other party becomes insolvent or files for bankruptcy…
+              </div>
+              <div style="color: var(--ink-3); font-size: 13.5px; line-height: 1.8; margin-top: 12px;">
+                <b style="color:var(--ink-2)">9.4 Effect of Termination.</b> Upon expiration or termination of this Agreement, Customer's rights to access the Service shall cease immediately and all unpaid undisputed fees shall become due…
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Reading view · no sidebars, full-bleed doc, step through matched clauses like a photo album.</div>
+    </div>
+  </div>
+
+  <div class="pc">
+    <div>
+      <h5 class="good">B · Strengths</h5>
+      <ul>
+        <li>Fastest possible input — palette opens focused.</li>
+        <li>Screen real-estate maximized for clauses, not chrome.</li>
+        <li>Keyboard shortcuts taught inline; power users accelerate.</li>
+        <li>Feels modern, matches Linear / Raycast / Notion mental model.</li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="warn">B · Tradeoffs</h5>
+      <ul>
+        <li>Discoverability hit for non-keyboard users — chips are less scannable than a sidebar.</li>
+        <li>Drawer adds a mode (open / collapsed) to reason about.</li>
+        <li>Lawyers new to modern tools may feel "empty" at the empty state.</li>
+        <li>Filter count/family counts not visible until you explore.</li>
+      </ul>
+    </div>
+  </div>
+</section>

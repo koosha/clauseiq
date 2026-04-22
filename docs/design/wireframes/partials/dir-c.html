@@ -1,0 +1,399 @@
+<!-- ================== DIRECTION C — WORKBENCH SPLIT-PANE ================== -->
+<section class="section" id="dirC">
+  <div class="section-head">
+    <div class="section-num">06</div>
+    <h2 class="section-title">Direction C &nbsp;— Workbench</h2>
+  </div>
+  <p class="section-sub">Three columns, one view. Filters · results · live preview of selected clause in its contract. No page nav. Scratchpad docks to the bottom. Closest to how a lawyer actually works.</p>
+
+  <div class="dir-badge"><span class="letter">C</span> Workbench · three columns · everything in one view</div>
+
+  <!-- ===== C.1 Workbench full ===== -->
+  <div class="annot-row">
+    <div>
+      <div class="wf">
+        <div class="wf-label">C.1 &nbsp;· Full workbench · filters + results + preview + scratchpad dock</div>
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <input class="search" value='"limitation of liability cap, 12 months fees, IP carve-out"' />
+            <button class="bar-btn primary">Search</button>
+            <span class="pill ink">4 pinned</span>
+            <span class="kbd">⌘K</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 200px 1fr 1.2fr; min-height: 480px;">
+            <!-- filters (slim) -->
+            <div style="border-right:1px solid var(--line); background: var(--bg); font-size: 12px;">
+              <div class="filter-section">
+                <h4>Family · 20</h4>
+                <div class="filter-opt sel"><span>Limitation of liability</span><span class="count">87</span></div>
+                <div class="filter-opt"><span>Indemnification</span><span class="count">64</span></div>
+                <div class="filter-opt"><span>Warranties</span><span class="count">51</span></div>
+                <div class="filter-opt muted">Show all →</div>
+              </div>
+              <div class="filter-section">
+                <h4>Governing law</h4>
+                <div class="filter-opt sel"><span>Any</span><span class="count">47</span></div>
+                <div class="filter-opt"><span>New York</span><span class="count">22</span></div>
+                <div class="filter-opt"><span>Delaware</span><span class="count">14</span></div>
+              </div>
+              <div class="filter-section">
+                <h4>Counterparty</h4>
+                <div class="filter-opt"><span>Acme Corp</span><span class="count">3</span></div>
+                <div class="filter-opt"><span>Globex</span><span class="count">2</span></div>
+                <div class="filter-opt"><span>Initech</span><span class="count">2</span></div>
+                <div class="filter-opt muted">+ 31 more</div>
+              </div>
+              <div class="filter-section">
+                <h4>Confidence</h4>
+                <div class="filter-opt"><span>High</span><span class="count">62</span></div>
+                <div class="filter-opt"><span>Medium</span><span class="count">18</span></div>
+              </div>
+            </div>
+
+            <!-- results -->
+            <div style="border-right: 1px solid var(--line);">
+              <div style="padding: 8px 14px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); border-bottom: 1px solid var(--line-2); display: flex; gap: 10px; align-items:center;">
+                <b style="color:var(--ink)">14</b><span>results</span><span>·</span><span>186 ms</span>
+                <div style="flex:1"></div><span class="pill">Relevance ↓</span>
+              </div>
+              <div class="row sel" style="grid-template-columns: 20px 1fr auto; padding: 10px 14px;">
+                <div class="idx">1</div>
+                <div class="body">
+                  <div class="head"><span class="title">Cap — 12 Months of Fees</span><span class="pill fam">liability</span></div>
+                  <div class="ctx">Initech MSA · §8.2 · N.Y.</div>
+                  <div class="clause" style="font-size:12.5px;">Each party's <mark>total aggregate liability</mark> shall not exceed the <mark>fees paid in the twelve (12) months</mark>…</div>
+                  <div class="meta"><span>0.96</span></div>
+                </div>
+                <div class="act"><button class="pinned">📌</button></div>
+              </div>
+              <div class="row" style="grid-template-columns: 20px 1fr auto; padding: 10px 14px;">
+                <div class="idx">2</div>
+                <div class="body">
+                  <div class="head"><span class="title">IP Indemnity Carve-out</span><span class="pill fam">liability</span></div>
+                  <div class="ctx">Acme MSA · §8.3 · N.Y.</div>
+                  <div class="clause" style="font-size:12.5px;">Notwithstanding the foregoing, the cap <mark>shall not apply</mark> to indemnification obligations for IP claims…</div>
+                  <div class="meta"><span>0.93</span></div>
+                </div>
+                <div class="act"><button>📌</button></div>
+              </div>
+              <div class="row" style="grid-template-columns: 20px 1fr auto; padding: 10px 14px;">
+                <div class="idx">3</div>
+                <div class="body">
+                  <div class="head"><span class="title">Mutual Liability Cap</span><span class="pill fam">liability</span></div>
+                  <div class="ctx">Globex MSA · §9.1 · N.Y.</div>
+                  <div class="clause" style="font-size:12.5px;">Each party's aggregate liability shall not exceed the greater of (a) twelve (12) months of fees or (b) $500,000…</div>
+                  <div class="meta"><span>0.89</span></div>
+                </div>
+                <div class="act"><button>📌</button></div>
+              </div>
+              <div class="row" style="grid-template-columns: 20px 1fr auto; padding: 10px 14px;">
+                <div class="idx">4</div>
+                <div class="body">
+                  <div class="head"><span class="title">Exclusion of Indirect Damages</span><span class="pill fam">liability</span></div>
+                  <div class="ctx">Pied Piper MSA · §7.4</div>
+                  <div class="clause" style="font-size:12.5px;">In no event shall either party be liable for indirect, incidental, special, consequential…</div>
+                  <div class="meta"><span>0.84</span></div>
+                </div>
+                <div class="act"><button>📌</button></div>
+              </div>
+              <div class="row" style="grid-template-columns: 20px 1fr auto; padding: 10px 14px;">
+                <div class="idx">5</div>
+                <div class="body">
+                  <div class="head"><span class="title">Super-Cap (gross negligence)</span><span class="pill fam">liability</span></div>
+                  <div class="ctx">Sterling Cooper MSA · §8.4</div>
+                  <div class="clause" style="font-size:12.5px;">The cap shall be increased to three (3) times the fees paid for claims arising from gross negligence…</div>
+                  <div class="meta"><span>0.79</span></div>
+                </div>
+                <div class="act"><button>📌</button></div>
+              </div>
+              <div class="row" style="grid-template-columns: 20px 1fr auto; padding: 10px 14px;">
+                <div class="idx">6</div>
+                <div class="body">
+                  <div class="head"><span class="title">Uncapped Breaches</span><span class="pill fam">liability</span></div>
+                  <div class="ctx">Hooli MSA · §8.5</div>
+                  <div class="clause" style="font-size:12.5px;">Nothing in this Agreement shall limit a party's liability for fraud or willful misconduct…</div>
+                  <div class="meta"><span>0.72</span></div>
+                </div>
+                <div class="act"><button>📌</button></div>
+              </div>
+            </div>
+
+            <!-- preview -->
+            <div>
+              <div style="padding: 10px 16px; border-bottom:1px solid var(--line-2); background: var(--bg); display:flex; gap: 8px; align-items:center;">
+                <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3);">PREVIEW · Initech MSA · §8.2</div>
+                <div style="flex:1"></div>
+                <button class="bar-btn">📌 Pinned</button>
+                <button class="bar-btn">Copy</button>
+                <button class="bar-btn">Open ↗</button>
+              </div>
+              <div style="padding: 20px 22px; color: var(--ink-3); font-size: 12.5px; line-height: 1.7;">
+                <b style="color:var(--ink-2)">8.1 &nbsp;Disclaimer.</b> Except as expressly set forth herein, the Service is provided "as is" and Vendor disclaims all other warranties…
+              </div>
+              <div style="margin: 0 18px; background: color-mix(in oklab, var(--accent) 9%, white); border-left: 3px solid var(--accent); padding: 14px 18px; border-radius: 0 3px 3px 0;">
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; margin-bottom:6px;">§ 8.2 · LIMITATION OF LIABILITY</div>
+                <div style="font-size: 13.5px; line-height: 1.7; color: var(--ink);">
+                  Except for breaches of confidentiality or indemnification obligations, each party's <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">total aggregate liability</mark> arising out of or relating to this Agreement shall not exceed the <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">fees paid by Customer in the twelve (12) months</mark> preceding the event giving rise to the claim. In no event shall either party be liable for indirect, consequential, or punitive damages.
+                </div>
+              </div>
+              <div style="padding: 12px 22px; color: var(--ink-4); font-size: 12.5px; line-height: 1.7;">
+                <b>8.3 &nbsp;IP Carve-out.</b> Notwithstanding the foregoing, the liability cap in Section 8.2 shall not apply to (i) a party's indemnification obligations…
+              </div>
+              <div style="padding: 10px 16px; border-top:1px solid var(--line-2); font-family: var(--mono); font-size: 11px; color: var(--ink-3); display:flex; gap:14px;">
+                <span>contract · <b style="color:var(--ink-2)">Initech MSA</b></span>
+                <span>·</span><span>signed 2022-11-03</span>
+                <span>·</span><span>N.Y. law</span>
+                <div style="flex:1"></div>
+                <span>cl_203_§8.2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- scratchpad dock -->
+          <div style="border-top: 1.5px solid var(--ink); background: var(--bg);">
+            <div style="padding: 10px 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--line);">
+              <div style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;">Scratchpad</div>
+              <span class="pill">4 clauses · 3 contracts</span>
+              <div style="flex:1"></div>
+              <button class="bar-btn">Collapse ↓</button>
+              <button class="bar-btn">Copy all</button>
+              <button class="bar-btn primary">Export draft ↓</button>
+            </div>
+            <div style="padding: 12px 16px; display: flex; gap: 12px; overflow-x: auto;">
+              <div class="scratchpad-tile" style="min-width: 240px;">
+                <div class="st-head"><span class="st-title">1 · Term. for breach</span><span class="st-meta">Acme §9.2</span></div>
+                <div style="font-size:11.5px; color:var(--ink-3); line-height:1.4;">Either party may terminate for material breach upon 30 days' written notice…</div>
+              </div>
+              <div class="scratchpad-tile" style="min-width: 240px;">
+                <div class="st-head"><span class="st-title">2 · Term. for conv.</span><span class="st-meta">Globex §11.3</span></div>
+                <div style="font-size:11.5px; color:var(--ink-3); line-height:1.4;">Customer may terminate for convenience upon 60 days' prior written notice…</div>
+              </div>
+              <div class="scratchpad-tile" style="min-width: 240px;">
+                <div class="st-head"><span class="st-title">3 · Cap 12-mo fees</span><span class="st-meta">Initech §8.2</span></div>
+                <div style="font-size:11.5px; color:var(--ink-3); line-height:1.4;">Aggregate liability not to exceed fees paid in the 12 months preceding the claim…</div>
+              </div>
+              <div class="scratchpad-tile" style="min-width: 240px;">
+                <div class="st-head"><span class="st-title">4 · IP carve-out</span><span class="st-meta">Acme §8.3</span></div>
+                <div style="font-size:11.5px; color:var(--ink-3); line-height:1.4;">Cap shall not apply to indemnification obligations for IP claims…</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Workbench · every action stays in one view. Arrow-key through results, preview updates live on the right.</div>
+    </div>
+    <div class="annot">
+      <p><span class="pin">C.1</span></p>
+      <p>No page navigation. Arrow keys move selection in the middle column, <b>preview updates live</b> on the right. This is the closest analog to how lawyers read a stack of precedents on their desk.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Scratchpad <b>docks to the bottom</b> as a horizontal strip. Always visible, always reachable, shows pinning progress like an IDE bottom panel.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Filter rail narrower (200px) than Direction A — we trade filter breathing-room for preview space.</p>
+    </div>
+  </div>
+
+  <!-- ===== C.2 Compare state ===== -->
+  <div class="annot-row reverse">
+    <div class="annot">
+      <p><span class="pin">C.2</span></p>
+      <p>Multi-select in results (<b>space</b> to mark) swaps the preview for a <b>side-by-side compare</b>. Key lawyer move: "does Acme's cap match Globex's?"</p>
+      <p class="sketch-arrow">→</p>
+      <p>Not in MVP scope per the plan — but the layout <b>admits it free</b>. Showing this as a "what we can grow into."</p>
+    </div>
+    <div>
+      <div class="wf">
+        <div class="wf-label">C.2 &nbsp;· Compare mode (post-MVP)</div>
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <div class="crumbs">Compare · <b>2 clauses</b> selected from <b>"limitation of liability"</b></div>
+            <div style="flex:1"></div>
+            <button class="bar-btn">Exit compare</button>
+          </div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; min-height: 440px;">
+            <div style="border-right: 1px solid var(--line); padding: 18px 22px;">
+              <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em;">INITECH · §8.2 · N.Y. · EXECUTED 2022-11</div>
+              <div style="font-family: var(--display); font-weight: 600; font-size: 17px; margin: 4px 0 14px;">Cap — 12 Months of Fees</div>
+              <div style="font-size: 13.5px; line-height: 1.7; color: var(--ink);">
+                Except for breaches of confidentiality or indemnification, each party's total aggregate liability shall not exceed the <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">fees paid in the twelve (12) months</mark> preceding the claim.
+              </div>
+              <div style="margin-top: 20px;" class="kv">
+                <div><span class="k">cap basis</span> · 12‑mo fees</div>
+                <div><span class="k">carve‑outs</span> · confidentiality, indemnification</div>
+                <div><span class="k">super‑cap</span> · —</div>
+              </div>
+            </div>
+            <div style="padding: 18px 22px;">
+              <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em;">GLOBEX · §9.1 · N.Y. · EXECUTED 2024-02</div>
+              <div style="font-family: var(--display); font-weight: 600; font-size: 17px; margin: 4px 0 14px;">Mutual Liability Cap</div>
+              <div style="font-size: 13.5px; line-height: 1.7; color: var(--ink);">
+                Each party's aggregate liability shall not exceed the <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">greater of (a) twelve (12) months of fees</mark> paid or <mark style="background:color-mix(in oklab, var(--accent) 28%, white); padding:0 2px;">(b) $500,000</mark>.
+              </div>
+              <div style="margin-top: 20px;" class="kv">
+                <div><span class="k">cap basis</span> · <b style="color:var(--warn)">greater of 12‑mo fees OR $500k</b></div>
+                <div><span class="k">carve‑outs</span> · —</div>
+                <div><span class="k">super‑cap</span> · —</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Compare · not MVP, but the layout naturally admits it when we're ready.</div>
+    </div>
+  </div>
+
+  <div class="pc">
+    <div>
+      <h5 class="good">C · Strengths</h5>
+      <ul>
+        <li>Zero navigation — momentum preserved across dozens of queries.</li>
+        <li>Live preview lets users verify without leaving the flow.</li>
+        <li>Scratchpad dock is a persistent progress indicator.</li>
+        <li>Scales naturally to post-MVP features (compare, diff).</li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="warn">C · Tradeoffs</h5>
+      <ul>
+        <li>Information density can feel overwhelming on first load.</li>
+        <li>Small-screen users (13" laptop) lose the preview pane.</li>
+        <li>Contract is shown in a narrow column, not full-page — less "document reading" feel.</li>
+        <li>More surface area to engineer for MVP.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================== EXPORT FLOW ================== -->
+<section class="section" id="export">
+  <div class="section-head">
+    <div class="section-num">07</div>
+    <h2 class="section-title">Export · the finish line</h2>
+  </div>
+  <p class="section-sub">Where a session ends. The scratchpad becomes a DOCX the lawyer opens in Word and keeps drafting from. Works identically across all three directions.</p>
+
+  <div class="flow">
+    <div class="flow-step"><div class="n">01</div><div class="t">Click "Export draft"</div><div class="d">Any direction — button is always visible.</div></div>
+    <div class="flow-step"><div class="n">02</div><div class="t">Review + reorder</div><div class="d">Confirm clauses, drag to reorder, rename sections.</div></div>
+    <div class="flow-step"><div class="n">03</div><div class="t">Pick a template</div><div class="d">Blank MSA skeleton, or a house style with headers.</div></div>
+    <div class="flow-step"><div class="n">04</div><div class="t">Generate .docx</div><div class="d">Each clause inserted with a track-change comment = citation.</div></div>
+    <div class="flow-step"><div class="n">05</div><div class="t">Open in Word</div><div class="d">Lawyer keeps drafting. ClauseIQ's job is done.</div></div>
+  </div>
+
+  <div class="wf">
+    <div class="wf-label">Export modal — reorder &amp; preview</div>
+    <div class="app">
+      <div class="topbar">
+        <div class="brand">Clause<span class="dot">IQ</span></div>
+        <div class="crumbs">Export draft · <b>8 clauses</b> from <b>6 contracts</b></div>
+        <div style="flex:1"></div>
+        <button class="bar-btn">Cancel</button>
+        <button class="bar-btn primary">Download .docx ↓</button>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; min-height: 480px;">
+        <!-- left: reorder list -->
+        <div style="border-right:1px solid var(--line); padding: 16px 20px;">
+          <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;">Clause order · drag to reorder</div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§1 · Definitions</span><span class="st-meta">placeholder</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§2 · Services</span><span class="st-meta">placeholder</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§3 · Fees — Subscription</span><span class="st-meta">Globex §3.1</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§4 · Payment — Net 30</span><span class="st-meta">Acme §4.1</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§5 · Term &amp; Renewal</span><span class="st-meta">Hooli §5.1</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§6 · Termination for Breach</span><span class="st-meta">Acme §9.2</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§7 · Termination for Convenience</span><span class="st-meta">Globex §11.3</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§8 · Limitation of Liability</span><span class="st-meta">Initech §8.2</span></div></div>
+          <div class="scratchpad-tile"><div class="st-head"><span class="st-title">§9 · IP Carve-out</span><span class="st-meta">Acme §8.3</span></div></div>
+        </div>
+        <!-- right: preview -->
+        <div style="background: var(--bg); padding: 20px; overflow: hidden;">
+          <div style="background: var(--panel); border: 1px solid var(--line); padding: 28px 36px; font-family: var(--display); font-size: 12px; line-height: 1.6; color: var(--ink-2); max-height: 420px; overflow: hidden;">
+            <div style="font-weight: 600; font-size: 15px; color: var(--ink); text-align: center; margin-bottom: 20px;">MASTER SERVICES AGREEMENT</div>
+            <div style="color: var(--ink-3); font-size: 11px; text-align: center; margin-bottom: 24px; font-family: var(--mono);">DRAFT · Assembled by ClauseIQ · 2026-04-19</div>
+            <div style="font-weight: 600; margin-bottom: 6px;">1. DEFINITIONS.</div>
+            <div style="color: var(--ink-4); margin-bottom: 14px;">[placeholder — to be filled]</div>
+            <div style="font-weight: 600; margin-bottom: 6px;">6. TERMINATION.</div>
+            <div style="margin-bottom: 6px;">6.1 Termination for Material Breach. Either party may terminate this Agreement for material breach by the other party upon thirty (30) days' written notice…</div>
+            <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); margin-bottom: 12px;">// cited from Acme SaaS MSA §9.2 (executed 2023-06-14, N.Y. law)</div>
+            <div style="margin-bottom: 6px;">6.2 Termination for Convenience. Customer may terminate this Agreement for convenience upon sixty (60) days' prior written notice…</div>
+            <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); margin-bottom: 12px;">// cited from Globex MSA §11.3</div>
+            <div style="font-weight: 600; margin-bottom: 6px;">8. LIMITATION OF LIABILITY.</div>
+            <div>Each party's total aggregate liability shall not exceed the fees paid in the twelve (12) months…</div>
+            <div style="font-family: var(--mono); font-size: 10px; color: var(--accent);">// cited from Initech MSA §8.2</div>
+          </div>
+          <div style="margin-top: 12px; display:flex; gap:10px; align-items:center;">
+            <span class="pill app">Template: Blank MSA</span>
+            <span class="pill app">Citations: as comments</span>
+            <span class="pill app">Section numbering: auto</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wf-cap">Export · assembles pinned clauses into a DOCX with citations injected as Word comments (so they disappear cleanly when the lawyer finalizes).</div>
+</section>
+
+
+<!-- ================== RECOMMENDATION & NEXT STEPS ================== -->
+<section class="section" id="next">
+  <div class="section-head">
+    <div class="section-num">08</div>
+    <h2 class="section-title">Recommendation &amp; next steps</h2>
+  </div>
+
+  <div class="two-col prose">
+    <div>
+      <h3 style="margin-top:0;">My pick: <b>Direction C</b>, with B's command bar grafted on</h3>
+      <p>
+        <strong>Why C.</strong> Lawyers run dozens of queries in one session. Page-based navigation (A) breaks momentum; a collapsed drawer (B) buries the scratchpad just when you want it loudest. The workbench keeps all three atoms — filters, results, preview — in view, and the scratchpad dock turns pinning into a progress bar.
+      </p>
+      <p>
+        <strong>Why graft in B.</strong> The palette's instant-focus entry and keyboard-first affordances are too good to lose. Keep the workbench as the "home" layout, open the command palette on <span class="kbd app">⌘K</span> / <span class="kbd app">/</span> for power moves (jump to a specific family, reopen a prior query, paste-and-match).
+      </p>
+      <p>
+        <strong>When to keep A.</strong> If early user tests show in-house counsel over‑45 struggle with dense three-column layouts, A is the safe fallback. Everything we build in C downgrades cleanly to A — filters + results list + a dedicated reader page.
+      </p>
+    </div>
+    <div>
+      <h3 style="margin-top:0;">What's not in these wireframes (on purpose)</h3>
+      <ul>
+        <li><strong>Auth, team admin, ingestion status.</strong> Explicitly deferred per the MVP plan.</li>
+        <li><strong>OCR / scanned contract handling.</strong> Rejected upstream; no UI needed.</li>
+        <li><strong>AI chat surface.</strong> Retrieval is the product. A chat window would invite scope creep.</li>
+        <li><strong>Eval dashboard.</strong> Internal tool, lives outside the lawyer UI.</li>
+        <li><strong>Word add-in.</strong> Phase 2. Today's finish line is a .docx download.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-head">
+      <span class="sub-tag">Next</span>
+      <h3 class="sub-title">Proposed sequence after this review</h3>
+    </div>
+    <div class="flow" style="margin-top: 8px;">
+      <div class="flow-step"><div class="n">01</div><div class="t">Pick a direction</div><div class="d">You react to these. I make one the canonical one.</div></div>
+      <div class="flow-step"><div class="n">02</div><div class="t">Flesh out states</div><div class="d">Zero-results, long-clause, paste-and-match, loading.</div></div>
+      <div class="flow-step"><div class="n">03</div><div class="t">Hi-fi pass</div><div class="d">Real type, real spacing, real copy. Still no color beyond the accent.</div></div>
+      <div class="flow-step"><div class="n">04</div><div class="t">Click-through prototype</div><div class="d">Wire up the full query → pin → export loop.</div></div>
+      <div class="flow-step"><div class="n">05</div><div class="t">Test with 2 lawyers</div><div class="d">Watch them run 5 real queries. Stopwatch on pinning.</div></div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-head">
+      <span class="sub-tag">Open questions</span>
+      <h3 class="sub-title">Things I'd want your input on before hi-fi</h3>
+    </div>
+    <ul class="prose" style="max-width: 820px;">
+      <li><strong>Scratchpad persistence.</strong> One global scratchpad, or per "matter" (draft)? Lawyers likely want one per deal.</li>
+      <li><strong>Citation style in export.</strong> Word comments, footnotes, or stripped out (so the draft is clean)? All three are viable — which do your users want?</li>
+      <li><strong>Clause-family visibility.</strong> Is "limitation_of_liability" fine as-is, or does it need a pretty label ("Limitation of liability")? I'm leaning pretty.</li>
+      <li><strong>Paste-and-match UX.</strong> Dedicated mode, or just let the palette accept pasted text and route automatically? Lean automatic.</li>
+      <li><strong>Result count.</strong> The plan returns top-20. Is 20 the right number on screen, or should we show 10 and paginate?</li>
+    </ul>
+  </div>
+</section>
+
+</div><!-- /canvas -->

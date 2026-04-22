@@ -1,10 +1,20 @@
+"""Persist an ingested contract to Postgres and mirror its clauses to OpenSearch.
+
+Postgres is the source of truth; the OpenSearch index is the derived search
+surface. Writes go to Postgres first (source of truth), then to OpenSearch
+(eventually consistent). Re-ingesting a contract with a known checksum raises
+rather than producing a duplicate.
+"""
+
 from dataclasses import dataclass
 from datetime import datetime, timezone
+
 from opensearchpy import OpenSearch
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 from app.config import get_settings
-from app.db.models import Contract, Clause
+from app.db.models import Clause, Contract
 
 
 @dataclass(frozen=True)
@@ -42,17 +52,20 @@ def persist_ingest(
     os_client: OpenSearch,
     payload: IngestPayload,
 ) -> None:
-    s = get_settings()
+    """Write the contract and its clauses to Postgres and index them in OpenSearch."""
+    settings = get_settings()
 
-    existing = session.execute(
+    duplicate = session.execute(
         select(Contract).where(Contract.checksum_sha256 == payload.checksum_sha256)
     ).scalar_one_or_none()
-    if existing is not None:
+    if duplicate is not None:
         raise ValueError(
             f"Contract already ingested (checksum {payload.checksum_sha256})"
         )
 
     now = datetime.now(timezone.utc)
+    embedding_version = now.strftime("%Y-%m")
+
     contract = Contract(
         contract_id=payload.contract_id,
         title=payload.title,
@@ -72,20 +85,20 @@ def persist_ingest(
     session.add(contract)
     session.flush()
 
-    for cp in payload.clauses:
+    for payload_clause in payload.clauses:
         clause = Clause(
-            clause_id=cp.clause_id,
+            clause_id=payload_clause.clause_id,
             contract_id=payload.contract_id,
-            section_path=cp.section_path,
-            heading_text=cp.heading_text,
-            clause_family=cp.clause_family,
-            text_display=cp.text_display,
-            text_normalized=cp.text_normalized,
-            char_start=cp.char_start,
-            char_end=cp.char_end,
-            embedding=cp.embedding,
-            embedding_model=s.openai_embedding_model,
-            embedding_version=now.strftime("%Y-%m"),
+            section_path=payload_clause.section_path,
+            heading_text=payload_clause.heading_text,
+            clause_family=payload_clause.clause_family,
+            text_display=payload_clause.text_display,
+            text_normalized=payload_clause.text_normalized,
+            char_start=payload_clause.char_start,
+            char_end=payload_clause.char_end,
+            embedding=payload_clause.embedding,
+            embedding_model=settings.openai_embedding_model,
+            embedding_version=embedding_version,
             embedding_created_at=now,
             language="en",
             jurisdiction=None,
@@ -95,21 +108,21 @@ def persist_ingest(
 
     session.flush()
 
-    for cp in payload.clauses:
+    for payload_clause in payload.clauses:
         os_client.index(
-            index=s.opensearch_clauses_index,
-            id=cp.clause_id,
+            index=settings.opensearch_clauses_index,
+            id=payload_clause.clause_id,
             body={
-                "clause_id": cp.clause_id,
+                "clause_id": payload_clause.clause_id,
                 "contract_id": payload.contract_id,
                 "agreement_type": payload.agreement_type,
-                "clause_family": cp.clause_family,
+                "clause_family": payload_clause.clause_family,
                 "governing_law": payload.governing_law,
-                "section_path": cp.section_path,
-                "heading_text": cp.heading_text,
-                "text_display": cp.text_display,
-                "text_normalized": cp.text_normalized,
-                "embedding": cp.embedding,
+                "section_path": payload_clause.section_path,
+                "heading_text": payload_clause.heading_text,
+                "text_display": payload_clause.text_display,
+                "text_normalized": payload_clause.text_normalized,
+                "embedding": payload_clause.embedding,
             },
         )
 

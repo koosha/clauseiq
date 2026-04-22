@@ -27,11 +27,11 @@ def classify_clause(
     clause_text: str,
 ) -> ClauseClassification:
     """Classify a clause into a family using OpenAI structured output."""
-    s = get_settings()
-    client = OpenAI(api_key=s.openai_api_key)
+    settings = get_settings()
+    client = OpenAI(api_key=settings.openai_api_key)
 
     response = client.chat.completions.parse(
-        model=s.openai_classifier_model,
+        model=settings.openai_classifier_model,
         messages=[
             {"role": "system", "content": CLASSIFIER_SYSTEM_PROMPT},
             {

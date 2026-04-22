@@ -1,0 +1,455 @@
+<!-- ================== DIRECTION A — CLASSIC TWO-PANE ================== -->
+<section class="section" id="dirA">
+  <div class="section-head">
+    <div class="section-num">04</div>
+    <h2 class="section-title">Direction A &nbsp;— Classic two-pane</h2>
+  </div>
+  <p class="section-sub">Filters left, results center. Clicking a result opens a dedicated contract-viewer page. The safest, closest-to-Westlaw direction. Familiar.</p>
+
+  <div class="dir-badge"><span class="letter">A</span> Classic two-pane · page-based navigation</div>
+
+  <!-- ===== A.1 Empty state ===== -->
+  <div class="annot-row">
+    <div>
+      <div class="wf">
+        <div class="wf-label">A.1 &nbsp;· Empty state / home</div>
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <div class="crumbs">Precedent library · <b>1,284 clauses</b> · 47 contracts</div>
+            <div style="flex:1"></div>
+            <span class="pill">v 0.1 · MVP</span>
+            <span class="kbd">⌘K</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 240px 1fr; min-height: 520px;">
+            <!-- sidebar -->
+            <div style="border-right:1px solid var(--line); background: var(--bg);">
+              <div class="filter-section">
+                <h4>Scratchpad</h4>
+                <div style="color:var(--ink-4); font-size:12px; font-style:italic;">Pin clauses to build a draft.<br/>0 pinned so far.</div>
+              </div>
+              <div class="filter-section">
+                <h4>Clause family</h4>
+                <div class="filter-opt"><span>Fees &amp; pricing</span><span class="count">128</span></div>
+                <div class="filter-opt"><span>Payment terms</span><span class="count">112</span></div>
+                <div class="filter-opt"><span>Term &amp; renewal</span><span class="count">94</span></div>
+                <div class="filter-opt"><span>Termination</span><span class="count">89</span></div>
+                <div class="filter-opt"><span>Limitation of liability</span><span class="count">87</span></div>
+                <div class="filter-opt muted" style="color:var(--ink-4)">Show 15 more…</div>
+              </div>
+              <div class="filter-section">
+                <h4>Governing law</h4>
+                <div class="filter-opt"><span>New York</span><span class="count">22</span></div>
+                <div class="filter-opt"><span>Delaware</span><span class="count">14</span></div>
+                <div class="filter-opt"><span>California</span><span class="count">8</span></div>
+              </div>
+              <div class="filter-section">
+                <h4>Counterparty</h4>
+                <div class="filter-opt"><span>Acme Corp</span><span class="count">3</span></div>
+                <div class="filter-opt"><span>Globex</span><span class="count">2</span></div>
+                <div class="filter-opt muted">Show 31 more…</div>
+              </div>
+            </div>
+            <!-- main empty -->
+            <div style="padding: 60px 48px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px;">
+              <div style="font-family: var(--display); font-size: 34px; letter-spacing:-0.01em; font-weight: 500; color: var(--ink);">
+                Find a clause from your precedents.
+              </div>
+              <div style="color: var(--ink-3); max-width: 460px; font-size: 14px;">
+                Describe what you want in plain English, or paste draft language to find similar clauses.
+              </div>
+              <div style="width: 620px; max-width: 100%; display:flex; border:1.5px solid var(--ink); border-radius: 4px; background: var(--panel); padding: 10px 12px;">
+                <div style="flex:1; font-family: var(--mono); font-size: 13px; color: var(--ink-4);">Cap on liability tied to fees paid…</div>
+                <span class="kbd app">/</span>
+              </div>
+              <div style="display:flex; gap: 10px; margin-top: 8px;">
+                <span class="pill app">Recent: 12‑month liability cap</span>
+                <span class="pill app">Recent: NY governing law</span>
+                <span class="pill app">Recent: auto‑renewal with opt‑out</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Empty state · sidebar visible from second 0, suggestions hint at the query language that works.</div>
+    </div>
+    <div class="annot">
+      <p><span class="pin">A.1</span></p>
+      <p>The filter sidebar is the <b>first thing on screen</b>. That's intentional — filters are not power-user chrome here, they're part of the vocabulary.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Recent queries double as a <b>prompt primer</b>: they show new users what a query looks like.</p>
+    </div>
+  </div>
+
+  <!-- ===== A.2 Results view ===== -->
+  <div class="annot-row reverse">
+    <div class="annot">
+      <p><span class="pin">A.2</span></p>
+      <p>Every row = one clause. Contract comes <b>under</b> the clause, not the other way around.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Pin button on the row. <b>P</b> pins the focused row. Pin count climbs in the left rail — visible reward.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Relevance score + "why" tooltip (BM25 + kNN + rerank) is opt‑in via <b>?</b> next to each score.</p>
+    </div>
+    <div>
+      <div class="wf">
+        <div class="wf-label">A.2 &nbsp;· Results view</div>
+        <div class="app">
+          <div class="topbar">
+            <div class="brand">Clause<span class="dot">IQ</span></div>
+            <input class="search" value='"30-day cure period for material breach, termination for convenience with 60-day notice"' />
+            <button class="bar-btn primary">Search</button>
+            <span class="kbd">⌘K</span>
+          </div>
+          <div style="display:grid; grid-template-columns: 240px 1fr; min-height: 640px;">
+            <!-- sidebar -->
+            <div style="border-right:1px solid var(--line); background: var(--bg);">
+              <div class="filter-section">
+                <h4>Scratchpad · 2 pinned</h4>
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">Termination for cause</span><span class="st-meta">Globex MSA</span></div>
+                  <div class="ph-line w90"></div><div class="ph-line w60"></div>
+                </div>
+                <div class="scratchpad-tile">
+                  <div class="st-head"><span class="st-title">Cure period</span><span class="st-meta">Acme MSA</span></div>
+                  <div class="ph-line w80"></div><div class="ph-line w70"></div>
+                </div>
+                <button class="bar-btn" style="width:100%; justify-content:center; margin-top:6px;">View scratchpad →</button>
+              </div>
+              <div class="filter-section">
+                <h4>Clause family</h4>
+                <div class="filter-opt sel"><span>Termination</span><span class="count">89</span></div>
+                <div class="filter-opt"><span>Term &amp; renewal</span><span class="count">94</span></div>
+                <div class="filter-opt"><span>General boilerplate</span><span class="count">210</span></div>
+                <div class="filter-opt muted">Show 17 more…</div>
+              </div>
+              <div class="filter-section">
+                <h4>Governing law</h4>
+                <div class="filter-opt sel"><span>New York</span><span class="count">22</span></div>
+                <div class="filter-opt"><span>Delaware</span><span class="count">14</span></div>
+                <div class="filter-opt"><span>Any</span><span class="count">47</span></div>
+              </div>
+            </div>
+            <!-- results -->
+            <div>
+              <div style="padding: 10px 16px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:center; font-family: var(--mono); font-size: 11px; color: var(--ink-3);">
+                <span><b style="color:var(--ink)">20</b> results</span>
+                <span>·</span>
+                <span>BM25 + kNN · reranked</span>
+                <span>·</span>
+                <span>148 ms</span>
+                <div style="flex:1"></div>
+                <span class="pill">Sort: Relevance ↓</span>
+                <span class="pill">Hide definitions ✓</span>
+              </div>
+
+              <div class="row sel">
+                <div class="idx">01</div>
+                <div class="body">
+                  <div class="head">
+                    <span class="title">Termination for Material Breach</span>
+                    <span class="pill fam">termination</span>
+                    <span class="pill good">executed</span>
+                  </div>
+                  <div class="ctx">Acme SaaS MSA · counterparty <b>Acme Corp</b> · Article 9 › Termination › §9.2 · N.Y. law</div>
+                  <div class="clause">Either party may terminate this Agreement for <mark>material breach</mark> by the other party upon <mark>thirty (30) days' written notice</mark>, provided that the breaching party shall have such thirty (30) day period to cure the breach…</div>
+                  <div class="meta">
+                    <span>score <b style="color:var(--ink)">0.94</b></span>
+                    <span>·</span>
+                    <span>matched: material breach, 30 days, cure</span>
+                  </div>
+                </div>
+                <div class="act">
+                  <button class="pinned">📌 Pinned</button>
+                  <button>Copy</button>
+                  <button>Open ↗</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="idx">02</div>
+                <div class="body">
+                  <div class="head">
+                    <span class="title">Termination for Convenience</span>
+                    <span class="pill fam">termination</span>
+                    <span class="pill good">executed</span>
+                  </div>
+                  <div class="ctx">Globex MSA · counterparty <b>Globex Inc.</b> · Article 11 › §11.3 · Del. law</div>
+                  <div class="clause">Customer may terminate this Agreement for convenience upon <mark>sixty (60) days' prior written notice</mark> to Vendor. Fees paid in advance shall be refunded pro rata for the unused portion of the then-current term…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.91</b></span><span>·</span><span>matched: 60 days, convenience, notice</span></div>
+                </div>
+                <div class="act">
+                  <button>📌 Pin</button><button>Copy</button><button>Open ↗</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="idx">03</div>
+                <div class="body">
+                  <div class="head">
+                    <span class="title">Cure Period &amp; Notice</span>
+                    <span class="pill fam">termination</span>
+                  </div>
+                  <div class="ctx">Initech MSA · counterparty <b>Initech</b> · Art. 12 › §12.1(b) · N.Y. law</div>
+                  <div class="clause">If either party materially breaches a provision of this Agreement and fails to <mark>cure</mark> such breach within <mark>thirty (30) days</mark> after receiving written notice…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.88</b></span></div>
+                </div>
+                <div class="act">
+                  <button>📌 Pin</button><button>Copy</button><button>Open ↗</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="idx">04</div>
+                <div class="body">
+                  <div class="head">
+                    <span class="title">Termination; Survival</span>
+                    <span class="pill fam">termination</span>
+                  </div>
+                  <div class="ctx">Hooli MSA · counterparty <b>Hooli</b> · Art. 10 · Cal. law</div>
+                  <div class="clause">Upon termination for any reason, the following Sections shall survive: Confidentiality, Limitation of Liability, Indemnification, and Governing Law. The parties shall promptly return or destroy…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.82</b></span></div>
+                </div>
+                <div class="act"><button>📌 Pin</button><button>Copy</button><button>Open ↗</button></div>
+              </div>
+
+              <div class="row">
+                <div class="idx">05</div>
+                <div class="body">
+                  <div class="head"><span class="title">Termination for Insolvency</span><span class="pill fam">termination</span></div>
+                  <div class="ctx">Sterling Cooper MSA · Art. 11 › §11.4 · Del. law</div>
+                  <div class="clause">Either party may terminate this Agreement immediately upon written notice if the other party (i) becomes insolvent; (ii) files a petition for bankruptcy…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.76</b></span></div>
+                </div>
+                <div class="act"><button>📌 Pin</button><button>Copy</button><button>Open ↗</button></div>
+              </div>
+
+              <div class="row">
+                <div class="idx">06</div>
+                <div class="body">
+                  <div class="head"><span class="title">Effect of Termination</span><span class="pill fam">termination</span></div>
+                  <div class="ctx">Pied Piper MSA · Art. 10 · N.Y. law</div>
+                  <div class="clause">Upon expiration or termination of this Agreement: (a) all outstanding undisputed fees shall become immediately due and payable; (b) Customer's rights to access the Service shall cease…</div>
+                  <div class="meta"><span>score <b style="color:var(--ink)">0.71</b></span></div>
+                </div>
+                <div class="act"><button>📌 Pin</button><button>Copy</button><button>Open ↗</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Results · dense rows, pinned ones anchor in sidebar. Keyboard focus = left accent bar.</div>
+    </div>
+  </div>
+
+  <!-- ===== A.3 Contract viewer ===== -->
+  <div class="annot-row">
+    <div>
+      <div class="wf">
+        <div class="wf-label">A.3 &nbsp;· Contract viewer (dedicated page)</div>
+        <div class="app">
+          <div class="topbar">
+            <button class="bar-btn">← Back to results</button>
+            <div class="crumbs">Contracts › <b>Acme SaaS MSA</b> › §9.2 Termination for Material Breach</div>
+            <div style="flex:1"></div>
+            <button class="bar-btn">📌 Pin this clause</button>
+            <button class="bar-btn">Copy §9.2</button>
+            <button class="bar-btn">Download PDF ↓</button>
+          </div>
+          <div style="display:grid; grid-template-columns: 260px 1fr 260px; min-height: 640px;">
+            <!-- left: contract nav -->
+            <div style="border-right:1px solid var(--line); background: var(--bg); padding: 14px 16px;">
+              <div class="app" style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px;">Document outline</div>
+              <div style="font-size: 12px; line-height: 1.9; color: var(--ink-2);">
+                <div>1. Definitions</div>
+                <div>2. Services</div>
+                <div>3. Subscription Fees</div>
+                <div>4. Payment Terms</div>
+                <div>5. Term</div>
+                <div>6. Warranties</div>
+                <div>7. Confidentiality</div>
+                <div>8. Limitation of Liability</div>
+                <div style="color:var(--ink); font-weight:600;">9. Termination</div>
+                <div style="padding-left: 14px; color: var(--ink-3);">9.1 Term</div>
+                <div style="padding-left: 14px; color: var(--accent); font-weight: 600;">▸ 9.2 Material Breach</div>
+                <div style="padding-left: 14px; color: var(--ink-3);">9.3 Insolvency</div>
+                <div style="padding-left: 14px; color: var(--ink-3);">9.4 Effect of Termination</div>
+                <div>10. Indemnification</div>
+                <div>11. Governing Law</div>
+                <div>12. General</div>
+              </div>
+            </div>
+            <!-- center: doc with highlighted clause -->
+            <div style="padding: 28px 40px; overflow:hidden; position: relative;">
+              <div style="font-family: var(--display); font-size: 20px; font-weight:600; margin-bottom:4px;">Master Services Agreement</div>
+              <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-bottom:24px;">Between Vendor Co. and <b style="color:var(--ink)">Acme Corp.</b> · Executed 2023‑06‑14 · N.Y. law</div>
+
+              <div style="color: var(--ink-3); font-size:13px; line-height: 1.7;">
+                <div style="margin-bottom: 10px;">9.1 &nbsp; <b style="color:var(--ink-2)">Term.</b> The initial term of this Agreement shall commence on the Effective Date and continue for a period of thirty‑six (36) months, unless earlier terminated in accordance with this Article 9.</div>
+              </div>
+
+              <div style="background: color-mix(in oklab, var(--accent) 8%, white); border-left: 3px solid var(--accent); padding: 16px 18px; margin: 14px -18px; border-radius: 0 3px 3px 0;">
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 8px;">§9.2 · TERMINATION FOR MATERIAL BREACH</div>
+                <div style="color: var(--ink); font-size: 13.5px; line-height: 1.7;">
+                  Either party may terminate this Agreement for <mark style="background:color-mix(in oklab, var(--accent) 25%, white); padding:0 2px;">material breach</mark> by the other party upon <mark style="background:color-mix(in oklab, var(--accent) 25%, white); padding:0 2px;">thirty (30) days' written notice</mark>, provided that the breaching party shall have such thirty (30) day period to cure the breach to the reasonable satisfaction of the non‑breaching party. For avoidance of doubt, failure to pay undisputed fees when due shall constitute a material breach for purposes of this Section 9.2.
+                </div>
+              </div>
+
+              <div style="color: var(--ink-4); font-size:13px; line-height: 1.7; margin-top: 12px;">
+                <div style="margin-bottom: 10px;">9.3 &nbsp; <b>Termination for Insolvency.</b> Either party may terminate this Agreement immediately upon written notice if the other party becomes insolvent…</div>
+                <div>9.4 &nbsp; <b>Effect of Termination.</b> Upon expiration or termination of this Agreement, Customer's rights to access the Service shall cease…</div>
+              </div>
+            </div>
+            <!-- right: clause metadata -->
+            <div style="border-left:1px solid var(--line); padding: 20px 18px; background: var(--bg);">
+              <div class="app" style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px;">Clause metadata</div>
+              <div class="kv">
+                <div><span class="k">clause_id</span> · cl_101_§9.2</div>
+                <div><span class="k">family</span> · termination</div>
+                <div><span class="k">confidence</span> · <b style="color:var(--good)">high</b></div>
+                <div><span class="k">contract</span> · Acme MSA</div>
+                <div><span class="k">counterparty</span> · Acme Corp</div>
+                <div><span class="k">signed</span> · 2023‑06‑14</div>
+                <div><span class="k">governing_law</span> · New York</div>
+                <div><span class="k">pages</span> · 14 – 15</div>
+              </div>
+              <div style="margin-top: 20px;" class="app">
+                <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px;">Similar clauses</div>
+                <div class="ph-line w80"></div><div class="ph-line w60"></div>
+                <div class="ph-line w70" style="margin-top:10px"></div><div class="ph-line w50"></div>
+                <div class="ph-line w90" style="margin-top:10px"></div><div class="ph-line w70"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Contract viewer · clause is highlighted in place within its doc. Left = outline, right = provenance, center = truth.</div>
+    </div>
+    <div class="annot">
+      <p><span class="pin">A.3</span></p>
+      <p>Dedicated page — <b>back button</b>, URL, shareable with a teammate.</p>
+      <p class="sketch-arrow">→</p>
+      <p>The clause is highlighted <b>in situ</b>, not extracted. The surrounding clauses (faded) let the lawyer see what was <i>also</i> negotiated.</p>
+      <p class="sketch-arrow">→</p>
+      <p>Right rail carries the citation. Matches the `contract` block in the API response.</p>
+    </div>
+  </div>
+
+  <!-- ===== A.4 Scratchpad ===== -->
+  <div class="annot-row reverse">
+    <div class="annot">
+      <p><span class="pin">A.4</span></p>
+      <p>Scratchpad is its own page. Reorder with drag. Group by clause family auto-collapses duplicates.</p>
+      <p class="sketch-arrow">→</p>
+      <p><b>Export → DOCX</b> is the finish line. Puts each pinned clause into a blank MSA template with citations as track-change comments.</p>
+    </div>
+    <div>
+      <div class="wf">
+        <div class="wf-label">A.4 &nbsp;· Scratchpad / basket</div>
+        <div class="app">
+          <div class="topbar">
+            <button class="bar-btn">← Back</button>
+            <div class="crumbs">Scratchpad · <b>8 clauses pinned</b> across 6 contracts</div>
+            <div style="flex:1"></div>
+            <span class="pill">Grouped by family</span>
+            <button class="bar-btn">Copy all</button>
+            <button class="bar-btn primary">Export as draft ↓</button>
+          </div>
+          <div style="padding: 20px 32px; display:grid; grid-template-columns: 1fr 340px; gap: 32px; min-height: 560px;">
+            <div>
+              <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px;">Termination · 3</div>
+              <div class="row">
+                <div class="idx">1.</div>
+                <div class="body">
+                  <div class="head"><span class="title">Termination for Material Breach</span><span class="pill fam">termination</span></div>
+                  <div class="ctx">Acme MSA · §9.2 · N.Y. law</div>
+                  <div class="clause">Either party may terminate this Agreement for material breach upon thirty (30) days' written notice…</div>
+                </div>
+                <div class="act"><button>Unpin</button><button>≡</button></div>
+              </div>
+              <div class="row">
+                <div class="idx">2.</div>
+                <div class="body">
+                  <div class="head"><span class="title">Termination for Convenience</span><span class="pill fam">termination</span></div>
+                  <div class="ctx">Globex MSA · §11.3 · Del. law</div>
+                  <div class="clause">Customer may terminate this Agreement for convenience upon sixty (60) days' prior written notice…</div>
+                </div>
+                <div class="act"><button>Unpin</button><button>≡</button></div>
+              </div>
+              <div class="row">
+                <div class="idx">3.</div>
+                <div class="body">
+                  <div class="head"><span class="title">Termination; Survival</span><span class="pill fam">termination</span></div>
+                  <div class="ctx">Hooli MSA · Art. 10 · Cal. law</div>
+                  <div class="clause">Upon termination, the following Sections shall survive: Confidentiality, Limitation of Liability…</div>
+                </div>
+                <div class="act"><button>Unpin</button><button>≡</button></div>
+              </div>
+
+              <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin: 24px 0 12px;">Limitation of liability · 2</div>
+              <div class="row">
+                <div class="idx">4.</div>
+                <div class="body">
+                  <div class="head"><span class="title">Cap at 12 Months Fees</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Initech MSA · §8.2 · N.Y. law</div>
+                  <div class="clause">Each party's total aggregate liability shall not exceed the fees paid by Customer in the twelve (12) months preceding the claim…</div>
+                </div>
+                <div class="act"><button>Unpin</button><button>≡</button></div>
+              </div>
+              <div class="row">
+                <div class="idx">5.</div>
+                <div class="body">
+                  <div class="head"><span class="title">Exclusion of Consequential Damages</span><span class="pill fam">limitation_of_liability</span></div>
+                  <div class="ctx">Acme MSA · §8.1 · N.Y. law</div>
+                  <div class="clause">In no event shall either party be liable for indirect, special, incidental, consequential, or punitive damages…</div>
+                </div>
+                <div class="act"><button>Unpin</button><button>≡</button></div>
+              </div>
+            </div>
+
+            <!-- Right: draft preview -->
+            <div style="background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 16px; font-size: 12px;">
+              <div style="font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px;">Draft preview</div>
+              <div style="font-family: var(--display); font-weight:600; font-size:14px; margin-bottom: 10px;">MSA — draft 2026‑04‑19.docx</div>
+              <div class="ph-line w90"></div>
+              <div class="ph-line w70"></div>
+              <div class="ph-line w80"></div>
+              <div style="margin-top:12px; padding-top: 10px; border-top: 1px dashed var(--line);">
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em;">§9 · TERMINATION</div>
+                <div style="color: var(--ink-2); line-height: 1.55; margin-top: 4px;">Either party may terminate this Agreement for material breach upon thirty (30) days' written notice…</div>
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--ink-4); margin-top: 4px;">// cited from Acme MSA §9.2</div>
+              </div>
+              <div style="margin-top:12px; padding-top: 10px; border-top: 1px dashed var(--line);">
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em;">§8 · LIMITATION OF LIABILITY</div>
+                <div style="color: var(--ink-2); line-height: 1.55; margin-top: 4px;">Each party's total aggregate liability shall not exceed the fees paid by Customer in the twelve (12) months…</div>
+                <div style="font-family: var(--mono); font-size: 10px; color: var(--ink-4); margin-top: 4px;">// cited from Initech MSA §8.2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-cap">Scratchpad · draft preview ghosted alongside so the user sees what "Export" will produce.</div>
+    </div>
+  </div>
+
+  <div class="pc">
+    <div>
+      <h5 class="good">A · Strengths</h5>
+      <ul>
+        <li>Familiar — mirrors Westlaw, Lexis, Bloomberg Law mental model.</li>
+        <li>Filter sidebar always visible — low discoverability tax.</li>
+        <li>Dedicated contract viewer = URL, shareable, bookmarkable.</li>
+        <li>Clean back-button flow; easy to onboard.</li>
+      </ul>
+    </div>
+    <div>
+      <h5 class="warn">A · Tradeoffs</h5>
+      <ul>
+        <li>Full-page navigation interrupts momentum on long sessions.</li>
+        <li>Scratchpad only partially visible from results; pinning feels less like a first-class action.</li>
+        <li>Filters consume 240px of real estate the user may not always need.</li>
+        <li>Feels less modern; closer to a portal than a tool.</li>
+      </ul>
+    </div>
+  </div>
+</section>

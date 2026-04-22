@@ -1,11 +1,13 @@
+"""Click entry points. Installed as the `clauseiq` console script."""
+
 from pathlib import Path
 
 import click
 
 from app.db.session import make_session_factory
+from app.ingest.orchestrator import ingest_contract
 from app.search.client import make_client
 from app.search.index_mapping import ensure_clauses_index
-from app.ingest.orchestrator import ingest_contract
 
 
 @click.group()
@@ -24,7 +26,7 @@ def init_index_cmd() -> None:
 @cli.command("ingest")
 @click.argument("path", type=click.Path(exists=True, path_type=Path))
 def ingest_cmd(path: Path) -> None:
-    """Ingest a single contract file or every supported file in a directory."""
+    """Ingest a single contract file, or every supported file in a directory."""
     factory = make_session_factory()
     os_client = make_client()
 
@@ -34,12 +36,12 @@ def ingest_cmd(path: Path) -> None:
         files = sorted(list(path.glob("*.pdf")) + list(path.glob("*.docx")))
 
     with factory() as session:
-        for f in files:
+        for file_path in files:
             try:
-                cid = ingest_contract(session, os_client, f)
-                click.echo(f"ingested {f.name} -> {cid}")
-            except ValueError as e:
-                click.echo(f"skip {f.name}: {e}", err=True)
+                contract_id = ingest_contract(session, os_client, file_path)
+                click.echo(f"ingested {file_path.name} -> {contract_id}")
+            except ValueError as exc:
+                click.echo(f"skip {file_path.name}: {exc}", err=True)
 
 
 if __name__ == "__main__":

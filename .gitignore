@@ -52,6 +52,7 @@ Thumbs.db
 
 # Local planning / tooling (not part of the public repo)
 superpowers/
+archive/
 openai_plan.md
 
 # Claude Code local settings (machine-specific permissions)

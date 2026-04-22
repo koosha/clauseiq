@@ -1,8 +1,12 @@
+"""Batched text embedder backed by the configured OpenAI embedding model."""
+
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from app.config import get_settings
 
+# OpenAI embedding endpoint accepts up to 2048 inputs per call; we keep batches
+# small enough to stay well inside TPM limits on the 3072-dim model.
 MAX_BATCH = 128
 
 
@@ -13,13 +17,14 @@ def _embed_batch(client: OpenAI, texts: list[str], model: str) -> list[list[floa
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
+    """Return one embedding vector per input text, batching API calls as needed."""
     if not texts:
         return []
-    s = get_settings()
-    client = OpenAI(api_key=s.openai_api_key)
+    settings = get_settings()
+    client = OpenAI(api_key=settings.openai_api_key)
 
-    out: list[list[float]] = []
-    for i in range(0, len(texts), MAX_BATCH):
-        batch = texts[i : i + MAX_BATCH]
-        out.extend(_embed_batch(client, batch, s.openai_embedding_model))
-    return out
+    embeddings: list[list[float]] = []
+    for start in range(0, len(texts), MAX_BATCH):
+        batch = texts[start : start + MAX_BATCH]
+        embeddings.extend(_embed_batch(client, batch, settings.openai_embedding_model))
+    return embeddings

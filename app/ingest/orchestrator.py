@@ -1,3 +1,15 @@
+"""Wire the ingestion stages together into a single end-to-end pipeline.
+
+Order of operations per contract:
+    1. intake_file            (read bytes, compute checksum)
+    2. extract_pdf / _docx    (layout-aware text extraction)
+    3. extract_contract_metadata  (agreement_type, governing_law, executed_status)
+    4. segment_clauses        (structure-aware clause boundaries)
+    5. embed_texts            (OpenAI embeddings, one per clause)
+    6. classify_clause        (OpenAI structured output, one per clause)
+    7. persist_ingest         (Postgres write + OpenSearch index)
+"""
+
 import re
 import uuid
 from pathlib import Path
@@ -6,16 +18,17 @@ from typing import Literal
 from opensearchpy import OpenSearch
 from sqlalchemy.orm import Session
 
-from app.ingest.intake import intake_file
-from app.ingest.extractors.pdf import extract_pdf
-from app.ingest.extractors.docx import extract_docx
-from app.ingest.segmenter import segment_clauses, SegmenterBlock
-from app.ingest.metadata import extract_contract_metadata
 from app.ingest.classifier import classify_clause
 from app.ingest.embedder import embed_texts
-from app.ingest.persistence import persist_ingest, IngestPayload, ClausePayload
+from app.ingest.extractors.docx import extract_docx
+from app.ingest.extractors.pdf import extract_pdf
+from app.ingest.intake import intake_file
+from app.ingest.metadata import extract_contract_metadata
+from app.ingest.persistence import ClausePayload, IngestPayload, persist_ingest
+from app.ingest.segmenter import SegmenterBlock, segment_clauses
 
-
+# Matches lines like "1. Payment Terms" or "2.3. Renewal". Used as a cheap
+# heading heuristic when a PDF has no style metadata.
 HEADING_LINE = re.compile(r"^\s*\d+(?:\.\d+)*\.\s+[A-Z]")
 
 
@@ -53,6 +66,11 @@ def ingest_contract(
     os_client: OpenSearch,
     file_path: Path,
 ) -> str:
+    """Run the full ingestion pipeline on a single contract file.
+
+    Returns the generated contract_id. Raises ValueError if the file extension
+    is unsupported or if the checksum matches a contract already in the DB.
+    """
     intake = intake_file(file_path)
 
     if intake.file_extension == ".pdf":
@@ -62,45 +80,51 @@ def ingest_contract(
     else:
         raise ValueError(f"Unsupported file type: {intake.file_extension}")
 
-    md = extract_contract_metadata(full_text)
+    metadata = extract_contract_metadata(full_text)
     segments = segment_clauses(blocks)
 
-    clause_texts = [seg.text_display for seg in segments]
+    clause_texts = [segment.text_display for segment in segments]
     embeddings = embed_texts(clause_texts)
 
     classifications = [
         classify_clause(
-            heading_text=seg.heading_text,
-            section_path=seg.section_path,
-            clause_text=seg.text_display,
+            heading_text=segment.heading_text,
+            section_path=segment.section_path,
+            clause_text=segment.text_display,
         )
-        for seg in segments
+        for segment in segments
     ]
 
     contract_id = f"ctr_{uuid.uuid4().hex[:12]}"
 
     clause_payloads: list[ClausePayload] = []
-    for seg, cls, emb in zip(segments, classifications, embeddings, strict=True):
+    for segment, classification, embedding in zip(
+        segments, classifications, embeddings, strict=True
+    ):
         clause_payloads.append(
             ClausePayload(
                 clause_id=f"cl_{uuid.uuid4().hex[:12]}",
-                section_path=seg.section_path,
-                heading_text=seg.heading_text,
-                clause_family=cls.family.value if cls.family is not None else None,
-                text_display=seg.text_display,
-                text_normalized=_normalize_text(seg.text_display),
-                char_start=seg.char_start,
-                char_end=seg.char_end,
-                embedding=emb,
+                section_path=segment.section_path,
+                heading_text=segment.heading_text,
+                clause_family=(
+                    classification.family.value
+                    if classification.family is not None
+                    else None
+                ),
+                text_display=segment.text_display,
+                text_normalized=_normalize_text(segment.text_display),
+                char_start=segment.char_start,
+                char_end=segment.char_end,
+                embedding=embedding,
             )
         )
 
     payload = IngestPayload(
         contract_id=contract_id,
         title=intake.source_filename.rsplit(".", 1)[0],
-        agreement_type=md.agreement_type or "SaaS_MSA",
-        executed_status=md.executed_status or "unknown",
-        governing_law=md.governing_law,
+        agreement_type=metadata.agreement_type or "SaaS_MSA",
+        executed_status=metadata.executed_status or "unknown",
+        governing_law=metadata.governing_law,
         client_name=None,
         counterparty_name=None,
         source_file_path=intake.source_file_path,
