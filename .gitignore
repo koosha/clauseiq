@@ -54,6 +54,7 @@ Thumbs.db
 superpowers/
 archive/
 openai_plan.md
+STATUS.md
 
 # Claude Code local settings (machine-specific permissions)
 .claude/
